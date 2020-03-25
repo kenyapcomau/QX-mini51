@@ -198,8 +198,8 @@
       <TopLine>1</TopLine>
       <CurrentLine>13</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\流水灯.c</PathWithFileName>
-      <FilenameWithoutPath>流水灯.c</FilenameWithoutPath>
+      <PathWithFileName>.\marquee.c</PathWithFileName>
+      <FilenameWithoutPath>marquee.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1797,7 +1797,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\流水灯.c</Name>
+          <Name>.\marquee.c</Name>
           <ColumnNumber>19</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>13</CurrentLine>

@@ -43,7 +43,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\</OutputDirectory>
-          <OutputName>流水灯</OutputName>
+          <OutputName>marquee</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -352,9 +352,9 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
-              <FileName>流水灯.c</FileName>
+              <FileName>marquee.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\流水灯.c</FilePath>
+              <FilePath>.\marquee.c</FilePath>
             </File>
           </Files>
         </Group>
