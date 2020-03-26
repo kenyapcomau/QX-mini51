@@ -347,9 +347,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>报警器.c</FileName>
+              <FileName>baojing.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\报警器.c</FilePath>
+              <FilePath>.\baojing.c</FilePath>
             </File>
           </Files>
         </Group>
