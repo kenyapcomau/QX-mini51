@@ -43,7 +43,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\</OutputDirectory>
-          <OutputName>音乐</OutputName>
+          <OutputName>music</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -352,9 +352,9 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
-              <FileName>音乐.c</FileName>
+              <FileName>music.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\音乐.c</FilePath>
+              <FilePath>.\music.c</FilePath>
             </File>
           </Files>
         </Group>

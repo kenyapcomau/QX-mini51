@@ -182,8 +182,8 @@
       <TopLine>1</TopLine>
       <CurrentLine>12</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\中断.c</PathWithFileName>
-      <FilenameWithoutPath>中断.c</FilenameWithoutPath>
+      <PathWithFileName>.\interrupt.c</PathWithFileName>
+      <FilenameWithoutPath>interrupt.c</FilenameWithoutPath>
       <WindowPosition>
         <length>44</length>
         <flags>2</flags>
@@ -1800,7 +1800,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\中断.c</Name>
+          <Name>.\interrupt.c</Name>
           <ColumnNumber>39</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>12</CurrentLine>

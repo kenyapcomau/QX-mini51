@@ -191,8 +191,8 @@
       <TopLine>13</TopLine>
       <CurrentLine>17</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\独立按键.c</PathWithFileName>
-      <FilenameWithoutPath>独立按键.c</FilenameWithoutPath>
+      <PathWithFileName>.\button.c</PathWithFileName>
+      <FilenameWithoutPath>button.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1790,7 +1790,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\独立按键.c</Name>
+          <Name>.\button.c</Name>
           <ColumnNumber>83</ColumnNumber>
           <TopLine>13</TopLine>
           <CurrentLine>17</CurrentLine>
