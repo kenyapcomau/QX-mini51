@@ -191,8 +191,8 @@
       <TopLine>1</TopLine>
       <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\1602字符显示.c</PathWithFileName>
-      <FilenameWithoutPath>1602字符显示.c</FilenameWithoutPath>
+      <PathWithFileName>.\1602-display.c</PathWithFileName>
+      <FilenameWithoutPath>1602-display.c</FilenameWithoutPath>
       <WindowPosition>
         <length>44</length>
         <flags>2</flags>
@@ -1559,7 +1559,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\1602字符显示.c</Name>
+          <Name>.\1602-display.c</Name>
           <ColumnNumber>0</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>1</CurrentLine>
