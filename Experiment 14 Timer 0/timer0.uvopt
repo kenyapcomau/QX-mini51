@@ -194,8 +194,8 @@
       <TopLine>1</TopLine>
       <CurrentLine>15</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\定时器0.c</PathWithFileName>
-      <FilenameWithoutPath>定时器0.c</FilenameWithoutPath>
+      <PathWithFileName>.\timer0.c</PathWithFileName>
+      <FilenameWithoutPath>timer0.c</FilenameWithoutPath>
       <WindowPosition>
         <length>44</length>
         <flags>2</flags>
@@ -1812,7 +1812,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\定时器0.c</Name>
+          <Name>.\timer0.c</Name>
           <ColumnNumber>0</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>15</CurrentLine>

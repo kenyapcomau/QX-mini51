@@ -43,7 +43,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\</OutputDirectory>
-          <OutputName>定时器0</OutputName>
+          <OutputName>timer0</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -347,9 +347,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>定时器0.c</FileName>
+              <FileName>timer0.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\定时器0.c</FilePath>
+              <FilePath>.\timer0.c</FilePath>
             </File>
           </Files>
         </Group>
