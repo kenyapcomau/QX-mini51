@@ -1373,7 +1373,7 @@
       <Size>100</Size>
       <ActiveTab>0</ActiveTab>
       <Doc>
-        <Name>.\串口收发.c</Name>
+        <Name>.\serial.c</Name>
         <ColumnNumber>60</ColumnNumber>
         <TopLine>22</TopLine>
         <CurrentLine>23</CurrentLine>

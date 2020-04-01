@@ -191,8 +191,8 @@
       <TopLine>1</TopLine>
       <CurrentLine>11</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\串口收发.c</PathWithFileName>
-      <FilenameWithoutPath>串口收发.c</FilenameWithoutPath>
+      <PathWithFileName>.\serial.c</PathWithFileName>
+      <FilenameWithoutPath>serial.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1790,7 +1790,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\串口收发.c</Name>
+          <Name>.\serial.c</Name>
           <ColumnNumber>61</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>11</CurrentLine>
