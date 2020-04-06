@@ -191,8 +191,8 @@
       <TopLine>1</TopLine>
       <CurrentLine>8</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\遥控键码显示.c</PathWithFileName>
-      <FilenameWithoutPath>遥控键码显示.c</FilenameWithoutPath>
+      <PathWithFileName>.\remote.c</PathWithFileName>
+      <FilenameWithoutPath>remote.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1790,7 +1790,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\遥控键码显示.c</Name>
+          <Name>.\remote.c</Name>
           <ColumnNumber>10</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>8</CurrentLine>
