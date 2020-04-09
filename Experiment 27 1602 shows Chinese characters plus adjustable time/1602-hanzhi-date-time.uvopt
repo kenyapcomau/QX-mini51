@@ -177,8 +177,8 @@
       <TopLine>10</TopLine>
       <CurrentLine>21</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\1602显示日期时间可调汉字.c</PathWithFileName>
-      <FilenameWithoutPath>1602显示日期时间可调汉字.c</FilenameWithoutPath>
+      <PathWithFileName>.\1602-hanzhi-date-time.c</PathWithFileName>
+      <FilenameWithoutPath>1602-hanzhi-date-time.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1526,7 +1526,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\1602显示日期时间可调汉字.c</Name>
+          <Name>.\1602-hanzhi-date-time.c</Name>
           <ColumnNumber>16</ColumnNumber>
           <TopLine>10</TopLine>
           <CurrentLine>21</CurrentLine>
