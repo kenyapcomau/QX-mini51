@@ -177,8 +177,8 @@
       <TopLine>312</TopLine>
       <CurrentLine>322</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\QX-mini51汉字液晶测试程序.c</PathWithFileName>
-      <FilenameWithoutPath>QX-mini51汉字液晶测试程序.c</FilenameWithoutPath>
+      <PathWithFileName>.\QX-mini51-hanzhi-LCD-test.c</PathWithFileName>
+      <FilenameWithoutPath>QX-mini51-hanzhi-LCD-test.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1526,7 +1526,7 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\QX-mini51汉字液晶测试程序.c</Name>
+          <Name>.\QX-mini51-hanzhi-LCD-test.c</Name>
           <ColumnNumber>22</ColumnNumber>
           <TopLine>312</TopLine>
           <CurrentLine>322</CurrentLine>

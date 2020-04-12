@@ -43,7 +43,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\</OutputDirectory>
-          <OutputName>QX-mini51汉字液晶测试程序</OutputName>
+          <OutputName>QX-mini51-hanzhi-LCD-test</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -347,9 +347,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>QX-mini51汉字液晶测试程序.c</FileName>
+              <FileName>QX-mini51-hanzhi-LCD-test.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\QX-mini51汉字液晶测试程序.c</FilePath>
+              <FilePath>.\QX-mini51-hanzhi-LCD-test.c</FilePath>
             </File>
           </Files>
         </Group>
