@@ -1,46 +1,46 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MINI51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio3	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º LCD1602ÏÔÊ¾³¬Éù²¨²â¾à			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º ¼ûÏÂÎÄ
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MINI51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio3	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š LCD1602æ˜¾ç¤ºè¶…å£°æ³¢æµ‹è·			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š è§ä¸‹æ–‡
 **********************************************************************************/
 
 /*
-SMC1602A(16*2)Ä£Äâ¿ÚÏß½ÓÏß·½Ê½
-Á¬½ÓÏßÍ¼:	
+SMC1602A(16*2)æ¨¡æ‹Ÿå£çº¿æŽ¥çº¿æ–¹å¼
+è¿žæŽ¥çº¿å›¾:	
        ---------------------------------------------------
        |LCM-----51   |	LCM-----51   |	LCM------51      |
        --------------------------------------------------|
        |DB0-----P2.0 |	DB4-----P2.4 |	RW-------P0.6    |
        |DB1-----P2.1 |	DB5-----P2.5 |	RS-------P0.7    |
        |DB2-----P2.2 |	DB6-----P2.6 |	E--------P0.5    |
-       |DB3-----P2.3 |	DB7-----P2.7 |	VLCD½Ó1Kµç×èµ½GND|
+       |DB3-----P2.3 |	DB7-----P2.7 |	VLCDæŽ¥1Kç”µé˜»åˆ°GND|
        ---------------------------------------------------
-½ÓÏß£ºÄ£¿éTRIG½Ó P1.2  ECH0 ½ÓP1.1
+æŽ¥çº¿ï¼šæ¨¡å—TRIGæŽ¥ P1.2  ECH0 æŽ¥P1.1
 
-±¾³ÌÐòÔ´ÂëÖ»¹©Ñ§Ï°²Î¿¼£¬²»µÃÓ¦ÓÃÓÚÉÌÒµÓÃÍ¾£¬ÈçÓÐÐèÒªÇëÁªÏµ×÷Õß¡£
+æœ¬ç¨‹åºæºç åªä¾›å­¦ä¹ å‚è€ƒï¼Œä¸å¾—åº”ç”¨äºŽå•†ä¸šç”¨é€”ï¼Œå¦‚æœ‰éœ€è¦è¯·è”ç³»ä½œè€…ã€‚
 
-[×¢:AT89x51Ê¹ÓÃ12M»ò11.0592M¾§Õñ,Êµ²âÊ¹ÓÃ11.0592M]
+[æ³¨:AT89x51ä½¿ç”¨12Mæˆ–11.0592Mæ™¶æŒ¯,å®žæµ‹ä½¿ç”¨11.0592M]
 =============================================================*/
-#include <AT89x51.H>		//Æ÷¼þÅäÖÃÎÄ¼þ
+#include <AT89x51.H>		//å™¨ä»¶é…ç½®æ–‡ä»¶
 #include <intrins.h>
 #define  RX  P1_1
 #define  TX  P1_2
 
-#define LCM_RW  P0_6 //¶¨ÒåLCDÒý½Å
+#define LCM_RW  P0_6 //å®šä¹‰LCDå¼•è„š
 #define LCM_RS  P0_7
 #define LCM_E   P0_5
 #define LCM_Data  P2
 
 
-#define Busy    0x80 //ÓÃÓÚ¼ì²âLCM×´Ì¬×ÖÖÐµÄBusy±êÊ¶
+#define Busy    0x80 //ç”¨äºŽæ£€æµ‹LCMçŠ¶æ€å­—ä¸­çš„Busyæ ‡è¯†
 
 void LCMInit(void);
 void DisplayOneChar(unsigned char X, unsigned char Y, unsigned char DData);
@@ -58,29 +58,29 @@ unsigned char code email[] =    {"863888999@QQ.COM"};
 unsigned char code Cls[] =      {"                "};
 unsigned char code ASCII[15] =    {'0','1','2','3','4','5','6','7','8','9','.','-','M'};
 
-static unsigned char DisNum = 0; //ÏÔÊ¾ÓÃÖ¸Õë				  
+static unsigned char DisNum = 0; //æ˜¾ç¤ºç”¨æŒ‡é’ˆ				  
        unsigned int  time=0;
 	   unsigned long S=0;
 	   bit      flag =0;
 	   unsigned char disbuff[4]	   ={ 0,0,0,0,};
 
 
-//Ð´Êý¾Ý
+//å†™æ•°æ®
 void WriteDataLCM(unsigned char WDLCM) 
 {
-	ReadStatusLCM(); //¼ì²âÃ¦
+	ReadStatusLCM(); //æ£€æµ‹å¿™
 	LCM_Data = WDLCM;
 	LCM_RS = 1;
 	LCM_RW = 0;
-	LCM_E = 0; //Èô¾§ÕñËÙ¶ÈÌ«¸ß¿ÉÒÔÔÚÕâºó¼ÓÐ¡µÄÑÓÊ±
-	LCM_E = 0; //ÑÓÊ±
+	LCM_E = 0; //è‹¥æ™¶æŒ¯é€Ÿåº¦å¤ªé«˜å¯ä»¥åœ¨è¿™åŽåŠ å°çš„å»¶æ—¶
+	LCM_E = 0; //å»¶æ—¶
 	LCM_E = 1;
 }
 
-//Ð´Ö¸Áî
-void WriteCommandLCM(unsigned char WCLCM,BuysC) //BuysCÎª0Ê±ºöÂÔÃ¦¼ì²â
+//å†™æŒ‡ä»¤
+void WriteCommandLCM(unsigned char WCLCM,BuysC) //BuysCä¸º0æ—¶å¿½ç•¥å¿™æ£€æµ‹
 {
-	if (BuysC) ReadStatusLCM(); //¸ù¾ÝÐèÒª¼ì²âÃ¦
+	if (BuysC) ReadStatusLCM(); //æ ¹æ®éœ€è¦æ£€æµ‹å¿™
 	LCM_Data = WCLCM;
 	LCM_RS = 0;
 	LCM_RW = 0;	
@@ -89,7 +89,7 @@ void WriteCommandLCM(unsigned char WCLCM,BuysC) //BuysCÎª0Ê±ºöÂÔÃ¦¼ì²â
 	LCM_E = 1;	
 }
 
-//¶ÁÊý¾Ý
+//è¯»æ•°æ®
 unsigned char ReadDataLCM(void)
 {
 	LCM_RS = 1; 
@@ -100,7 +100,7 @@ unsigned char ReadDataLCM(void)
 	return(LCM_Data);
 }
 
-//¶Á×´Ì¬
+//è¯»çŠ¶æ€
 unsigned char ReadStatusLCM(void)
 {
 	LCM_Data = 0xFF; 
@@ -109,65 +109,65 @@ unsigned char ReadStatusLCM(void)
 	LCM_E = 0;
 	LCM_E = 0;
 	LCM_E = 1;
-	while (LCM_Data & Busy); //¼ì²âÃ¦ÐÅºÅ
+	while (LCM_Data & Busy); //æ£€æµ‹å¿™ä¿¡å·
 	return(LCM_Data);
 }
 
-void LCMInit(void) //LCM³õÊ¼»¯
+void LCMInit(void) //LCMåˆå§‹åŒ–
 {
 	LCM_Data = 0;
-	WriteCommandLCM(0x38,0); //Èý´ÎÏÔÊ¾Ä£Ê½ÉèÖÃ£¬²»¼ì²âÃ¦ÐÅºÅ
+	WriteCommandLCM(0x38,0); //ä¸‰æ¬¡æ˜¾ç¤ºæ¨¡å¼è®¾ç½®ï¼Œä¸æ£€æµ‹å¿™ä¿¡å·
 	Delay5Ms(); 
 	WriteCommandLCM(0x38,0);
 	Delay5Ms(); 
 	WriteCommandLCM(0x38,0);
 	Delay5Ms(); 
 
-	WriteCommandLCM(0x38,1); //ÏÔÊ¾Ä£Ê½ÉèÖÃ,¿ªÊ¼ÒªÇóÃ¿´Î¼ì²âÃ¦ÐÅºÅ
-	WriteCommandLCM(0x08,1); //¹Ø±ÕÏÔÊ¾
-	WriteCommandLCM(0x01,1); //ÏÔÊ¾ÇåÆÁ
-	WriteCommandLCM(0x06,1); // ÏÔÊ¾¹â±êÒÆ¶¯ÉèÖÃ
-	WriteCommandLCM(0x0F,1); // ÏÔÊ¾¿ª¼°¹â±êÉèÖÃ
+	WriteCommandLCM(0x38,1); //æ˜¾ç¤ºæ¨¡å¼è®¾ç½®,å¼€å§‹è¦æ±‚æ¯æ¬¡æ£€æµ‹å¿™ä¿¡å·
+	WriteCommandLCM(0x08,1); //å…³é—­æ˜¾ç¤º
+	WriteCommandLCM(0x01,1); //æ˜¾ç¤ºæ¸…å±
+	WriteCommandLCM(0x06,1); // æ˜¾ç¤ºå…‰æ ‡ç§»åŠ¨è®¾ç½®
+	WriteCommandLCM(0x0F,1); // æ˜¾ç¤ºå¼€åŠå…‰æ ‡è®¾ç½®
 }
 
-//°´Ö¸¶¨Î»ÖÃÏÔÊ¾Ò»¸ö×Ö·û
+//æŒ‰æŒ‡å®šä½ç½®æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦
 void DisplayOneChar(unsigned char X, unsigned char Y, unsigned char DData)
 {
 	Y &= 0x1;
-	X &= 0xF; //ÏÞÖÆX²»ÄÜ´óÓÚ15£¬Y²»ÄÜ´óÓÚ1
-	if (Y) X |= 0x40; //µ±ÒªÏÔÊ¾µÚ¶þÐÐÊ±µØÖ·Âë+0x40;
-	X |= 0x80; //Ëã³öÖ¸ÁîÂë
-	WriteCommandLCM(X, 1); //·¢ÃüÁî×Ö
-	WriteDataLCM(DData); //·¢Êý¾Ý
+	X &= 0xF; //é™åˆ¶Xä¸èƒ½å¤§äºŽ15ï¼ŒYä¸èƒ½å¤§äºŽ1
+	if (Y) X |= 0x40; //å½“è¦æ˜¾ç¤ºç¬¬äºŒè¡Œæ—¶åœ°å€ç +0x40;
+	X |= 0x80; //ç®—å‡ºæŒ‡ä»¤ç 
+	WriteCommandLCM(X, 1); //å‘å‘½ä»¤å­—
+	WriteDataLCM(DData); //å‘æ•°æ®
 }
 
-//°´Ö¸¶¨Î»ÖÃÏÔÊ¾Ò»´®×Ö·û
+//æŒ‰æŒ‡å®šä½ç½®æ˜¾ç¤ºä¸€ä¸²å­—ç¬¦
 void DisplayListChar(unsigned char X, unsigned char Y, unsigned char code *DData)
 {
 	unsigned char ListLength;
 
   ListLength = 0;
 	Y &= 0x1;
-	X &= 0xF; //ÏÞÖÆX²»ÄÜ´óÓÚ15£¬Y²»ÄÜ´óÓÚ1
-	while (DData[ListLength]>0x19) //Èôµ½´ï×Ö´®Î²ÔòÍË³ö
+	X &= 0xF; //é™åˆ¶Xä¸èƒ½å¤§äºŽ15ï¼ŒYä¸èƒ½å¤§äºŽ1
+	while (DData[ListLength]>0x19) //è‹¥åˆ°è¾¾å­—ä¸²å°¾åˆ™é€€å‡º
 		{
-			if (X <= 0xF) //X×ø±êÓ¦Ð¡ÓÚ0xF
+			if (X <= 0xF) //Xåæ ‡åº”å°äºŽ0xF
 				{
-					DisplayOneChar(X, Y, DData[ListLength]); //ÏÔÊ¾µ¥¸ö×Ö·û
+					DisplayOneChar(X, Y, DData[ListLength]); //æ˜¾ç¤ºå•ä¸ªå­—ç¬¦
 					ListLength++;
 					X++;
 				}
 		}
 }
 
-//5msÑÓÊ±
+//5mså»¶æ—¶
 void Delay5Ms(void)
 {
 	unsigned int TempCyc = 5552;
 	while(TempCyc--);
 }
 
-//400msÑÓÊ±
+//400mså»¶æ—¶
 void Delay400Ms(void)
 {
 	unsigned char TempCycA = 5;
@@ -185,16 +185,16 @@ void Delay400Ms(void)
 	 TH0=0;
 	 TL0=0;
 	
-	 S=(time*1.7)/100;     //Ëã³öÀ´ÊÇCM
-	 if((S>=700)||flag==1) //³¬³ö²âÁ¿·¶Î§ÏÔÊ¾¡°-¡±
+	 S=(time*1.7)/100;     //ç®—å‡ºæ¥æ˜¯CM
+	 if((S>=700)||flag==1) //è¶…å‡ºæµ‹é‡èŒƒå›´æ˜¾ç¤ºâ€œ-â€
 	 {	 
 	  flag=0;
 	 
 	  DisplayOneChar(0, 1, ASCII[11]);
-	  DisplayOneChar(1, 1, ASCII[10]);	//ÏÔÊ¾µã
+	  DisplayOneChar(1, 1, ASCII[10]);	//æ˜¾ç¤ºç‚¹
 	  DisplayOneChar(2, 1, ASCII[11]);
 	  DisplayOneChar(3, 1, ASCII[11]);
-	  DisplayOneChar(4, 1, ASCII[12]);	//ÏÔÊ¾M
+	  DisplayOneChar(4, 1, ASCII[12]);	//æ˜¾ç¤ºM
 	 }
 	 else
 	 {
@@ -202,21 +202,21 @@ void Delay400Ms(void)
 	  disbuff[1]=S%1000%100/10;
 	  disbuff[2]=S%1000%10 %10;
 	  DisplayOneChar(0, 1, ASCII[disbuff[0]]);
-	  DisplayOneChar(1, 1, ASCII[10]);	//ÏÔÊ¾µã
+	  DisplayOneChar(1, 1, ASCII[10]);	//æ˜¾ç¤ºç‚¹
 	  DisplayOneChar(2, 1, ASCII[disbuff[1]]);
 	  DisplayOneChar(3, 1, ASCII[disbuff[2]]);
-	  DisplayOneChar(4, 1, ASCII[12]);	//ÏÔÊ¾M
+	  DisplayOneChar(4, 1, ASCII[12]);	//æ˜¾ç¤ºM
 	 }
 	}
 /********************************************************/
-     void zd0() interrupt 1 		 //T0ÖÐ¶ÏÓÃÀ´¼ÆÊýÆ÷Òç³ö,³¬¹ý²â¾à·¶Î§
+     void zd0() interrupt 1 		 //T0ä¸­æ–­ç”¨æ¥è®¡æ•°å™¨æº¢å‡º,è¶…è¿‡æµ‹è·èŒƒå›´
   {
-    flag=1;							 //ÖÐ¶ÏÒç³ö±êÖ¾
+    flag=1;							 //ä¸­æ–­æº¢å‡ºæ ‡å¿—
   }
 /********************************************************/
-     void  StartModule() 		         //Æô¶¯Ä£¿é
+     void  StartModule() 		         //å¯åŠ¨æ¨¡å—
   {
-	  TX=1;			                     //Æô¶¯Ò»´ÎÄ£¿é
+	  TX=1;			                     //å¯åŠ¨ä¸€æ¬¡æ¨¡å—
 	  _nop_(); 
 	  _nop_(); 
 	  _nop_(); 
@@ -257,32 +257,32 @@ void delayms(unsigned int ms)
 void main(void)
 {
 	unsigned char TempCyc;
-	Delay400Ms(); //Æô¶¯µÈ´ý£¬µÈLCM½²Èë¹¤×÷×´Ì¬
-	LCMInit(); //LCM³õÊ¼»¯
-	Delay5Ms(); //ÑÓÊ±Æ¬¿Ì(¿É²»Òª)
+	Delay400Ms(); //å¯åŠ¨ç­‰å¾…ï¼Œç­‰LCMè®²å…¥å·¥ä½œçŠ¶æ€
+	LCMInit(); //LCMåˆå§‹åŒ–
+	Delay5Ms(); //å»¶æ—¶ç‰‡åˆ»(å¯ä¸è¦)
 	DisplayListChar(0, 0, mcustudio);
 	DisplayListChar(0, 1, email);
-	ReadDataLCM();//²âÊÔÓÃ¾äÎÞÒâÒå
+	ReadDataLCM();//æµ‹è¯•ç”¨å¥æ— æ„ä¹‰
 	for (TempCyc=0; TempCyc<10; TempCyc++)
-	Delay400Ms(); //ÑÓÊ±
+	Delay400Ms(); //å»¶æ—¶
 	DisplayListChar(0, 1, Cls);	
 	while(1)
 	{
-	 TMOD=0x01;		   //ÉèT0Îª·½Ê½1£¬GATE=1£»
+	 TMOD=0x01;		   //è®¾T0ä¸ºæ–¹å¼1ï¼ŒGATE=1ï¼›
 	 TH0=0;
 	 TL0=0;          
-	 ET0=1;             //ÔÊÐíT0ÖÐ¶Ï
-	 EA=1;			   //¿ªÆô×ÜÖÐ¶Ï			
+	 ET0=1;             //å…è®¸T0ä¸­æ–­
+	 EA=1;			   //å¼€å¯æ€»ä¸­æ–­			
 	
 	while(1)
 	  {
 	     StartModule();
 		// DisplayOneChar(0, 1, ASCII[0]);
-	     while(!RX);		//µ±RXÎªÁãÊ±µÈ´ý
-	     TR0=1;			    //¿ªÆô¼ÆÊý
-	     while(RX);			//µ±RXÎª1¼ÆÊý²¢µÈ´ý
-	     TR0=0;				//¹Ø±Õ¼ÆÊý
-         Conut();			//¼ÆËã
+	     while(!RX);		//å½“RXä¸ºé›¶æ—¶ç­‰å¾…
+	     TR0=1;			    //å¼€å¯è®¡æ•°
+	     while(RX);			//å½“RXä¸º1è®¡æ•°å¹¶ç­‰å¾…
+	     TR0=0;				//å…³é—­è®¡æ•°
+         Conut();			//è®¡ç®—
 		 delayms(80);		//80MS
 		 
 	  }

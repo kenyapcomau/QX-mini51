@@ -1,40 +1,40 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MCS51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52RC
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio4	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º ÎÞÔ´·äÃùÆ÷²âÊÔ-ÊÀÉÏÖ»ÓÐÂèÂèºÃ			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º Ê¹ÓÃÇ°Çë½ÓÉÏJ1ÌøÏßÃ±
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MCS51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52RC
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio4	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š æ— æºèœ‚é¸£å™¨æµ‹è¯•-ä¸–ä¸Šåªæœ‰å¦ˆå¦ˆå¥½			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š ä½¿ç”¨å‰è¯·æŽ¥ä¸ŠJ1è·³çº¿å¸½
 **********************************************************************************/
 
 #include <reg52.h>   
 #define uchar unsigned char 
-sbit      beep=P3^6;  	//¶¨Òå·äÃùÆ÷Êä³ö¶Ë¿Ú
+sbit      beep=P3^6;  	//å®šä¹‰èœ‚é¸£å™¨è¾“å‡ºç«¯å£
 uchar timer0h,timer0l,time;
 
-                         //ÊÀÉÏÖ»ÓÐÂèÂèºÃ  Êý¾Ý±í
+                         //ä¸–ä¸Šåªæœ‰å¦ˆå¦ˆå¥½  æ•°æ®è¡¨
 code uchar sszymmh[]={6,2,3,5,2,1,3,2,2,5,2,2,1,3,2,6,2,1,5,2,1,
                       6,2,4,3,2,2,5,2,1,6,2,1,5,2,2,3,2,2,1,2,1,
                       6,1,1,5,2,1,3,2,1,2,2,4,2,2,3,3,2,1,5,2,2,
                       5,2,1,6,2,1,3,2,2,2,2,2,1,2,4,5,2,3,3,2,1,
                       2,2,1,1,2,1,6,1,1,1,2,1,5,1,6,0,0,0 
                                       };
-                         // Òô½×ÆµÂÊ±í ¸ß°ËÎ»
+                         // éŸ³é˜¶é¢‘çŽ‡è¡¨ é«˜å…«ä½
 code uchar FREQH[]={0xF2,0xF3,0xF5,0xF5,0xF6,0xF7,0xF8, 
                     0xF9,0xF9,0xFA,0xFA,0xFB,0xFB,0xFC,0xFC, //1,2,3,4,5,6,7,8,i
                     0xFC,0xFD,0xFD,0xFD,0xFD,0xFE,
                     0xFE,0xFE,0xFE,0xFE,0xFE,0xFE,0xFF,} ;
-                         // Òô½×ÆµÂÊ±í µÍ°ËÎ»
+                         // éŸ³é˜¶é¢‘çŽ‡è¡¨ ä½Žå…«ä½
 code uchar FREQL[]={0x42,0xC1,0x17,0xB6,0xD0,0xD1,0xB6,
                     0x21,0xE1,0x8C,0xD8,0x68,0xE9,0x5B,0x8F, //1,2,3,4,5,6,7,8,i
                     0xEE,0x44, 0x6B,0xB4,0xF4,0x2D, 
                     0x47,0x77,0xA2,0xB6,0xDA,0xFA,0x16,};
-void delay(uchar t)		  // ÑÓÊ±º¯Êý 
+void delay(uchar t)		  // å»¶æ—¶å‡½æ•° 
 {
 	uchar t1;
 	unsigned long t2;
@@ -44,7 +44,7 @@ void delay(uchar t)		  // ÑÓÊ±º¯Êý
 	}
 	TR0=0;
 }
-void song()				 //  ÒôÀÖ´¦Àíº¯Êý
+void song()				 //  éŸ³ä¹å¤„ç†å‡½æ•°
 {
 	TH0=timer0h;
 	TL0=timer0l;
@@ -52,18 +52,18 @@ void song()				 //  ÒôÀÖ´¦Àíº¯Êý
 	delay(time);                       
 }
 /******************************************************************
-                  			Ö÷º¯Êý                                      
+                  			ä¸»å‡½æ•°                                      
 ******************************************************************/
 void main(void)
 {
 	uchar k,i;
-	TMOD=1; 			//ÖÃCT0¶¨Ê±¹¤×÷·½Ê½1
+	TMOD=1; 			//ç½®CT0å®šæ—¶å·¥ä½œæ–¹å¼1
 	EA=1;
-	ET0=1;				//IE=0x82 //CPU¿ªÖÐ¶Ï,CT0¿ªÖÐ¶Ï 
+	ET0=1;				//IE=0x82 //CPUå¼€ä¸­æ–­,CT0å¼€ä¸­æ–­ 
 	while(1)
 	{
 		i=0;  
-		while(i<100)				  //ÒôÀÖÊý×é³¤¶È £¬³ªÍê´ÓÍ·ÔÙÀ´  
+		while(i<100)				  //éŸ³ä¹æ•°ç»„é•¿åº¦ ï¼Œå”±å®Œä»Žå¤´å†æ¥  
 		{              
 			k=sszymmh[i]+7*sszymmh[i+1]-1;
 			timer0h=FREQH[k];
@@ -74,7 +74,7 @@ void main(void)
 		}
 	} 
 }
-void t0int() interrupt 1		//¶¨Ê±Æ÷ÖÐ¶Ïº¯Êý
+void t0int() interrupt 1		//å®šæ—¶å™¨ä¸­æ–­å‡½æ•°
 {
 	TR0=0;
 	beep=!beep;

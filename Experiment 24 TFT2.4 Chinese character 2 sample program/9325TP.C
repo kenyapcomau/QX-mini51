@@ -1,14 +1,14 @@
 /*********************************************************************************
-* ¡¾±àĞ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MCS51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØĞ¾Æ¬¡¿£º STC89C52RC
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio4	
-* ¡¾³ÌĞò¹¦ÄÜ¡¿£º TFTÒº¾§ÏÔÊ¾²âÊÔ			   			            			    
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®éªŒå¹³å°ã€‘ï¼š QX-MCS51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æ§èŠ¯ç‰‡ã€‘ï¼š STC89C52RC
+* ã€ç¼–è¯‘ç¯å¢ƒã€‘ï¼š Keil Î¼Visio4	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š TFTæ¶²æ™¶æ˜¾ç¤ºæµ‹è¯•			   			            			    
 **********************************************************************************/
 
 
@@ -33,9 +33,9 @@
 #define Cyan           0x7FFF
 #define Yellow         0xFFE0
 
-sbit CS=P0^4;		//Æ¬Ñ¡
-sbit RES=P0^3;		//¸´Î»
-sbit RS=P0^7;		//Êı¾İ/ÃüÁîÑ¡Ôñ
+sbit CS=P0^4;		//ç‰‡é€‰
+sbit RES=P0^3;		//å¤ä½
+sbit RS=P0^7;		//æ•°æ®/å‘½ä»¤é€‰æ‹©
 sbit RW=P0^6;
 
 
@@ -83,29 +83,29 @@ ClearScreen(0x0);
 //show_colour_bar();	
 
 
-LCD_PutString(2,40,"http://ttsemb.taobao.com/",Red,Blue);                  ///Ç°¾°ÑÕÉ«ºÍ±³¾°ÑÕÉ«£¬¿ÉÒÔÖ±½ÓÔ¤¶¨Òå£¬Ò²¿ÉÒÔÖ±½ÓÌîÈë16½øÖÆÊı×Ö
+LCD_PutString(2,40,"http://ttsemb.taobao.com/",Red,Blue);                  ///å‰æ™¯é¢œè‰²å’ŒèƒŒæ™¯é¢œè‰²ï¼Œå¯ä»¥ç›´æ¥é¢„å®šä¹‰ï¼Œä¹Ÿå¯ä»¥ç›´æ¥å¡«å…¥16è¿›åˆ¶æ•°å­—
 LCD_PutString(40,60,"I LOVE MY JOB ",Blue2,Yellow);
-LCD_PutString(40,80,"326µç×Ó¹¤×÷ÊÒ",Magenta,Green);
-LCD_PutString(40,100,"×¨Òµ¼¼ÊõÖ§³ÖÂÛÌ³",0x07e0,0xf800);
-LCD_PutString(40,120,"×¨Òµ¿ª·¢°å¹¤¿Ø°å",0xF800,Yellow);
+LCD_PutString(40,80,"326ç”µå­å·¥ä½œå®¤",Magenta,Green);
+LCD_PutString(40,100,"ä¸“ä¸šæŠ€æœ¯æ”¯æŒè®ºå›",0x07e0,0xf800);
+LCD_PutString(40,120,"ä¸“ä¸šå¼€å‘æ¿å·¥æ§æ¿",0xF800,Yellow);
 LCD_PutString(40,140,"1234567890",0xF800,Yellow);
 LCD_PutString(20,160,"abcdefghijklmnopqistuvwxyz",0xF800,Yellow);
 LCD_PutString(20,180,"`,./<>';:[]{}\|?)(-=+*&^%$",0xF800,Yellow);
-PutGB3232(20,200,"ÎÒ",Blue,Yellow);	//Ğ´Èë32x32ºº×Ö
-PutGB3232(60,200,"°®",Blue,Red);
-PutGB3232(100,200,"µ¥",Blue,Magenta);
-PutGB3232(140,200,"Æ¬",Blue,Green);
-PutGB3232(180,200,"»ú",Blue,Cyan);	
+PutGB3232(20,200,"æˆ‘",Blue,Yellow);	//å†™å…¥32x32æ±‰å­—
+PutGB3232(60,200,"çˆ±",Blue,Red);
+PutGB3232(100,200,"å•",Blue,Magenta);
+PutGB3232(140,200,"ç‰‡",Blue,Green);
+PutGB3232(180,200,"æœº",Blue,Cyan);	
 PutGB3232(20,240,"3",Blue,0X00);	
 PutGB3232(60,240,"2",Blue,0X00);	
 PutGB3232(100,240,"6",Blue,0X00);	
-PutGB3232(140,240,"µç",Blue,0X00);	
-PutGB3232(180,240,"×Ó",Blue,0X00);
+PutGB3232(140,240,"ç”µ",Blue,0X00);	
+PutGB3232(180,240,"å­",Blue,0X00);
 PutGB3232(20,280,"",Blue,0X00);		
-PutGB3232(60,280,"»¶",Blue,0X00);	
-PutGB3232(100,280,"Ó­",Blue,0X00);	
-PutGB3232(140,280,"Äã",Blue,0X00);	
-PutGB3232(180,280,"£¡",Blue,0X00);	
+PutGB3232(60,280,"æ¬¢",Blue,0X00);	
+PutGB3232(100,280,"è¿",Blue,0X00);	
+PutGB3232(140,280,"ä½ ",Blue,0X00);	
+PutGB3232(180,280,"ï¼",Blue,0X00);	
 	
 
 //	show_photo();
@@ -157,14 +157,14 @@ void LCD_PutChar(unsigned short x, unsigned short y, char c, unsigned int fColor
 	}
 
 
-#include "GB1616.h"	//16*16ºº×Ö×ÖÄ£
+#include "GB1616.h"	//16*16æ±‰å­—å­—æ¨¡
 
 void PutGB1616(unsigned short x, unsigned short  y, unsigned char c[2], unsigned int fColor,unsigned int bColor){
 	unsigned int i,j,k;
 
 	LCD_SetPos(x,  x+16-1,y, y+16-1);
 
-	for (k=0;k<64;k++) { //64±êÊ¾×Ô½¨ºº×Ö¿âÖĞµÄ¸öÊı£¬Ñ­»·²éÑ¯ÄÚÂë
+	for (k=0;k<64;k++) { //64æ ‡ç¤ºè‡ªå»ºæ±‰å­—åº“ä¸­çš„ä¸ªæ•°ï¼Œå¾ªç¯æŸ¥è¯¢å†…ç 
 	  if ((codeGB_16[k].Index[0]==c[0])&&(codeGB_16[k].Index[1]==c[1])){ 
     	for(i=0;i<32;i++) {
 		  unsigned short m=codeGB_16[k].Msk[i];
@@ -182,14 +182,14 @@ void PutGB1616(unsigned short x, unsigned short  y, unsigned char c[2], unsigned
 	  }	
 	}
 
-	#include "GB3232.h"	//32*32ºº×Ö×ÖÄ£
+	#include "GB3232.h"	//32*32æ±‰å­—å­—æ¨¡
 
 void PutGB3232(unsigned short x, unsigned short  y, unsigned char c[2], unsigned int fColor,unsigned int bColor){
 	unsigned int i,j,k;
 
 	LCD_SetPos(x,  x+32-1,y, y+32-1);
 
-	for (k=0;k<15;k++) { //15±êÊ¾×Ô½¨ºº×Ö¿âÖĞµÄ¸öÊı£¬Ñ­»·²éÑ¯ÄÚÂë
+	for (k=0;k<15;k++) { //15æ ‡ç¤ºè‡ªå»ºæ±‰å­—åº“ä¸­çš„ä¸ªæ•°ï¼Œå¾ªç¯æŸ¥è¯¢å†…ç 
 	  if ((codeGB_32[k].Index[0]==c[0])&&(codeGB_32[k].Index[1]==c[1])){ 
     	for(i=0;i<128;i++) {
 		  unsigned short m=codeGB_32[k].Msk[i];
@@ -222,7 +222,7 @@ void LCD_PutString(unsigned short x, unsigned short y, unsigned char *s, unsigne
 			}
 		}
 	}
-//==================== ÏÔÊ¾R G B î†É« ====================//
+//==================== æ˜¾ç¤ºR G B é¡”è‰² ====================//
 
 
 
@@ -241,7 +241,7 @@ void Show_RGB (unsigned int x0,unsigned int x1,unsigned int y0,unsigned int y1,u
 
 }
 
-//====================== ÏÔÊ¾²ÊÌõ ======================//
+//====================== æ˜¾ç¤ºå½©æ¡ ======================//
 void show_colour_bar (void)
 
 {
@@ -357,7 +357,7 @@ void  Write_Data_U16(unsigned int y)
 	Write_Data(m,n);
 
 }
-//====================== Ğ´ÃüÁî ==========================//
+//====================== å†™å‘½ä»¤ ==========================//
 
 void Write_Cmd(unsigned char DH,unsigned char DL)
 {
@@ -378,7 +378,7 @@ void Write_Cmd(unsigned char DH,unsigned char DL)
 	CS=1;
 }
 
-//===================== Ğ´Êı¾İ ===========================//
+//===================== å†™æ•°æ® ===========================//
 
 void Write_Data(unsigned char DH,unsigned char DL)
 {
@@ -414,7 +414,7 @@ void delayms(unsigned int count)
 
 
 
-//===================== ³õÊ¼»¯´úÂë =======================//
+//===================== åˆå§‹åŒ–ä»£ç  =======================//
 
 
 
@@ -422,7 +422,7 @@ void ILI9325_Initial(void)
 { 
 
   //////////////////////////////////////////////////////////
- delayms(150);                     //¸ù¾İ²»Í¬¾§ÕñËÙ¶È¿ÉÒÔµ÷ÕûÑÓÊ±£¬±£ÕÏÎÈ¶¨ÏÔÊ¾
+ delayms(150);                     //æ ¹æ®ä¸åŒæ™¶æŒ¯é€Ÿåº¦å¯ä»¥è°ƒæ•´å»¶æ—¶ï¼Œä¿éšœç¨³å®šæ˜¾ç¤º
 Init_data(0x00E5, 0x8000); // Set the Vcore voltage and this setting is must.
 Init_data(0x0000, 0x0001); // Start internal OSC.
 Init_data(0x0001, 0x0100); // set SS and SM bit
@@ -501,13 +501,13 @@ Init_data(0x0007, 0x0173); // 262K color and display ON
 /*===========================================================*/
 
 /*************************************************************
-º¯ÊıÃû³Æ:LCD_DefineDispWindow
-¹¦    ÄÜ:¶¨ÒåÏÔÊ¾´°Ìå
-²Î    Êı:x0:  ´°ÌåÖĞX×ø±êÖĞ½ÏĞ¡Õß
-	 x1:  ´°ÌåÖĞX×ø±êÖĞ½Ï´óÕß
-	 y0:  ´°ÌåÖĞY×ø±êÖĞ½ÏĞ¡Õß
-	 y1:  ´°ÌåÖĞY×ø±êÖĞ½Ï´óÕß 
-·µ »Ø Öµ:ÎŞ
+å‡½æ•°åç§°:LCD_DefineDispWindow
+åŠŸ    èƒ½:å®šä¹‰æ˜¾ç¤ºçª—ä½“
+å‚    æ•°:x0:  çª—ä½“ä¸­Xåæ ‡ä¸­è¾ƒå°è€…
+	 x1:  çª—ä½“ä¸­Xåæ ‡ä¸­è¾ƒå¤§è€…
+	 y0:  çª—ä½“ä¸­Yåæ ‡ä¸­è¾ƒå°è€…
+	 y1:  çª—ä½“ä¸­Yåæ ‡ä¸­è¾ƒå¤§è€… 
+è¿” å› å€¼:æ— 
 *************************************************************/
 static void LCD_SetPos(unsigned int x0,unsigned int x1,unsigned int y0,unsigned int y1)
 {

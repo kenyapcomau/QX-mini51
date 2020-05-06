@@ -1,33 +1,33 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MCS51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52RC
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio4	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º LEDÉÁË¸			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º ×¢ÒâÏÈÓÃÌøÏßÃ°½«J2¶Ì½Ó£¬Ê¹ÓÃÅÜÂíµÆÄ£¿é
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MCS51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52RC
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio4	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š LEDé—ªçƒ			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š æ³¨æ„å…ˆç”¨è·³çº¿å†’å°†J2çŸ­æŽ¥ï¼Œä½¿ç”¨è·‘é©¬ç¯æ¨¡å—
 **********************************************************************************/
 
-#include <reg51.h>	   //´ËÎÄ¼þÖÐ¶¨ÒåÁË51µÄÒ»Ð©ÌØÊâ¹¦ÄÜ¼Ä´æÆ÷
+#include <reg51.h>	   //æ­¤æ–‡ä»¶ä¸­å®šä¹‰äº†51çš„ä¸€äº›ç‰¹æ®ŠåŠŸèƒ½å¯„å­˜å™¨
 
-void delay(unsigned int i);  //ÉùÃ÷ÑÓÊ±º¯Êý
+void delay(unsigned int i);  //å£°æ˜Žå»¶æ—¶å‡½æ•°
 
 void main()
 { 
    
-  P1  = 0x00; //ÖÃP0¿ÚÎªµÍµçÆ½ 
-  delay(600); // µ÷ÓÃÑÓÊ±³ÌÐò
-  P1  = 0xff; //ÖÃP0¿ÚÎª¸ßµçÆ½
-  delay(600); // µ÷ÓÃÑÓÊ±³ÌÐò
+  P1  = 0x00; //ç½®P0å£ä¸ºä½Žç”µå¹³ 
+  delay(600); // è°ƒç”¨å»¶æ—¶ç¨‹åº
+  P1  = 0xff; //ç½®P0å£ä¸ºé«˜ç”µå¹³
+  delay(600); // è°ƒç”¨å»¶æ—¶ç¨‹åº
 
 
 }
 
-/*******ÑÓÊ±º¯Êý*************/
+/*******å»¶æ—¶å‡½æ•°*************/
 void delay(unsigned int i)
 {
     unsigned char j;

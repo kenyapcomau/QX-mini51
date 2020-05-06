@@ -1,24 +1,24 @@
 /*********************************************************************************
-* ����дʱ�䡿�� 2014��3��5��
-* ����    �ߡ��� �������:03
-* ����    ������ 1.0
-* ����    վ���� http://www.qxmcu.com/ 
-* ���Ա����̡��� http://qxmcu.taobao.com/ (ֱ����)  http://qx-mcu.taobao.com/  ���ܵ꣩
-* ��ʵ��ƽ̨���� QX-MINI51 ��Ƭ��������
-* ���ⲿ���񡿣� 11.0592mhz	
-* ������оƬ���� STC89C52
-* �����뻷������ Keil ��Visio3	
-* �������ܡ��� �����������ʾ��LEDָʾ��			   			            			    
-* ��ʹ��˵������ 
+* 【编写时间】： 2014年3月5日
+* 【作    者】： 清翔电子:03
+* 【版    本】： 1.0
+* 【网    站】： http://www.qxmcu.com/ 
+* 【淘宝店铺】： http://qxmcu.taobao.com/ (直销店)  http://qx-mcu.taobao.com/  （总店）
+* 【实验平台】： QX-MINI51 单片机开发板
+* 【外部晶振】： 11.0592mhz	
+* 【主控芯片】： STC89C52
+* 【编译环境】： Keil μVisio3	
+* 【程序功能】： 蓝牙数码管显示加LED指示灯			   			            			    
+* 【使用说明】： 
 
-STC89c52��HC-06�������ߣ�
+STC89c52与HC-06蓝牙连线：
 	RXD    TXD
 	TXD    RXD
-	�������ӷ�ʽ����ձ��ļ��µ�ͼƬ
-�ֻ�������������ͨ������
-����Ѹ���Android�Ա�����ͨ������
-����ģ�鰲װ��������ձ��ļ����µ�ͼƬ01
-����ģ�鹺���ַ��http://item.taobao.com/item.htm?id=27378740053
+	蓝牙连接方式请参照本文件下的图片
+手机采用蓝牙串口通信助手
+最后已改用Android自编蓝牙通信软件
+蓝牙模块安装方法请参照本文件夹下的图片01
+蓝牙模块购买地址：http://item.taobao.com/item.htm?id=27378740053
 
 **********************************************************************************/
 
@@ -28,10 +28,10 @@ STC89c52��HC-06�������ߣ�
 #define uint unsigned int
 uchar tmp;
 uint c=0;
-sbit led1=P1^0;		    //ָʾ��0
-sbit led2=P1^1;			//ָʾ��1
-sbit led3=P1^2;			//ָʾ��3
-sbit led7=P1^7;			//ָʾ��3
+sbit led1=P1^0;		    //指示灯0
+sbit led2=P1^1;			//指示灯1
+sbit led3=P1^2;			//指示灯3
+sbit led7=P1^7;			//指示灯3
 
 sbit P2_0 = P2^0;
 sbit P2_1 = P2^1;
@@ -61,9 +61,9 @@ void display(uchar value)
    P2_0 = 1;
 }	
 	  
-void init();   //���ڳ�ʼ��
-void send(unsigned char a);	//���ֽڷ��ͺ���
-void ctrl(); //���մ�������
+void init();   //串口初始化
+void send(unsigned char a);	//单字节发送函数
+void ctrl(); //接收处理函数
 
 void main()
 {
@@ -71,7 +71,7 @@ void main()
           while(1)
           {         
                   display(SBUF);
-				  if(RI==1)                     // �Ƿ������ݵ���
+				  if(RI==1)                     // 是否有数据到来
                   {
                    RI = 0;
 				  ctrl();
@@ -79,66 +79,66 @@ void main()
           }
 }
 
- void init()	//���ڳ�ʼ��
+ void init()	//串口初始化
  {
- 		  ES=0;								  //���ж�
-		  SCON = 0x50;                        // REN=1�������н���״̬�����ڹ���ģʽ1,
-											  //10λUART��1λ��ʼλ��8λ����λ��1λֹͣλ������żУ�飩�������ʿɱ�
+ 		  ES=0;								  //关中断
+		  SCON = 0x50;                        // REN=1允许串行接受状态，串口工作模式1,
+											  //10位UART（1位起始位，8位数据位，1位停止位，无奇偶校验），波特率可变
 
-		  TMOD = 0x20;                        // ��ʱ��1�����ڷ�ʽ2��8λ�Զ�����ģʽ, ���ڲ���������
-          TH1=TL1=0xFD;                       // ������9600 �����β��Բ��þ���Ϊ11.0592��
+		  TMOD = 0x20;                        // 定时器1工作于方式2，8位自动重载模式, 用于产生波特率
+          TH1=TL1=0xFD;                       // 波特率9600 （本次测试采用晶振为11.0592）
           
-          PCON &= 0x7f;                       // �����ʲ�����
-          TR1 = 1;							  //��ʱ��1��ʼ����������������
-											  //���ͱ�־λ��0
-		  TI=0;								  //���ձ�־λ��0
+          PCON &= 0x7f;                       // 波特率不倍增
+          TR1 = 1;							  //定时器1开始工作，产生波特率
+											  //发送标志位置0
+		  TI=0;								  //接收标志位置0
 		  RI=0;
 		  
 		  //EA=0;
 	      ES=1;
  }
    
-void send(unsigned char a)	//���ֽ����ݷ���
-{							//ע�⣺����Ƭ��TXD��P3.1��������������������P3.1�˽��������衣���β�����Ҫ����������
+void send(unsigned char a)	//单字节数据发送
+{							//注意：若单片机TXD（P3.1）无上拉能力，必须在P3.1端接上拉电阻。本次测试需要接上拉电阻
 	TI=0;	
 	SBUF=a;
 	while(TI==0);
 	TI=0;
 
-	if(c%2)					//����ָʾ�Ʊ�־��ÿ����һ�Σ��˵�������
+	if(c%2)					//发送指示灯标志，每接收一次，此灯亮灭交替
 	 led7=1;
 	else
 	 led7=0;
 	c++;
 } 
 
-void ctrl()		            //���մ�������
+void ctrl()		            //接收处理函数
 {
   				  switch(tmp)
 				  {
 				  	case '1':
-						led1=1;		       	    //�յ��ַ�1��ָʾ��0��
+						led1=1;		       	    //收到字符1，指示灯0灭
 						send(tmp);
 						break;					
-					case '2':					 //�յ��ַ�2��ָʾ��1��
+					case '2':					 //收到字符2，指示灯1灭
 						 led2=1; 
 						 send(tmp);
 						 break;
-					case '3':				    //�յ��ַ�3��ָʾ��0��1��
+					case '3':				    //收到字符3，指示灯0、1亮
 						 led1=0;
 						 led2=0;
 						 send(tmp);
 						 break;
-					case '4':					//�յ��ַ�4��ָʾ��0��1��
+					case '4':					//收到字符4，指示灯0、1灭
 						  led1=1;
 						  led2=1;
 						  send(tmp);
 						  break;
-					case '5':					//�յ��ַ�5��ָʾ��3��
+					case '5':					//收到字符5，指示灯3亮
 						led3=0;
 						send(tmp);
 						break;
-					default:                   //��������ȫ��
+					default:                   //其他，灯全灭
 						  led1=1;
 						  led2=1;
 						  led3=1;

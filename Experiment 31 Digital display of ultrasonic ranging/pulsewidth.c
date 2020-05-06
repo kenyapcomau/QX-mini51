@@ -1,24 +1,24 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MINI51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio3	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º HC-SR04 ³¬Éù²¨²â¾àÄ£¿é DEMO ³ÌÐò			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º ¼ûÏÂÎÄ
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MINI51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio3	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š HC-SR04 è¶…å£°æ³¢æµ‹è·æ¨¡å— DEMO ç¨‹åº			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š è§ä¸‹æ–‡
 **********************************************************************************/
 
 /***********************************************************************************************************/
-//hc-sr04 ³¬Éù²¨²â¾àÄ£¿é DEMO ³ÌÐò
-//¾§Õñ£º11¡£0592
-//½ÓÏß£ºÄ£¿éTRIG½Ó P1.2  ECH0 ½ÓP1.1
-//ÊýÂë¹Ü£º¹²ÑôÊýÂë¹ÜP0½ÓÊý¾Ý¿Ú,P2.2 P2.1 P2.0½ÓÑ¡Í¨ÊýÂë¹Ü
+//hc-sr04 è¶…å£°æ³¢æµ‹è·æ¨¡å— DEMO ç¨‹åº
+//æ™¶æŒ¯ï¼š11ã€‚0592
+//æŽ¥çº¿ï¼šæ¨¡å—TRIGæŽ¥ P1.2  ECH0 æŽ¥P1.1
+//æ•°ç ç®¡ï¼šå…±é˜³æ•°ç ç®¡P0æŽ¥æ•°æ®å£,P2.2 P2.1 P2.0æŽ¥é€‰é€šæ•°ç ç®¡
 /***********************************************************************************************************/	    
-#include <AT89x51.H>		//Æ÷¼þÅäÖÃÎÄ¼þ
+#include <AT89x51.H>		//å™¨ä»¶é…ç½®æ–‡ä»¶
 #include <intrins.h>
 #define  RX  P1_1
 #define  TX  P1_2
@@ -31,7 +31,7 @@ unsigned char const discode[] ={ 0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x
 unsigned char const positon[3]={ 0xfe,0xfd,0xfb};
 unsigned char disbuff[4]	   ={ 0,0,0,0,};
 /********************************************************/
-    void Display(void)				 //É¨ÃèÊýÂë¹Ü
+    void Display(void)				 //æ‰«ææ•°ç ç®¡
 	{
 	 if(posit==0)
 	 {P0=(discode[disbuff[posit]])&0x7f;}
@@ -48,13 +48,13 @@ unsigned char disbuff[4]	   ={ 0,0,0,0,};
 	 TH0=0;
 	 TL0=0;
 	
-	 S=(time*1.7)/100;     //Ëã³öÀ´ÊÇCM
-	 if((S>=700)||flag==1) //³¬³ö²âÁ¿·¶Î§ÏÔÊ¾¡°-¡±
+	 S=(time*1.7)/100;     //ç®—å‡ºæ¥æ˜¯CM
+	 if((S>=700)||flag==1) //è¶…å‡ºæµ‹é‡èŒƒå›´æ˜¾ç¤ºâ€œ-â€
 	 {	 
 	  flag=0;
-	  disbuff[0]=10;	   //¡°-¡±
-	  disbuff[1]=10;	   //¡°-¡±
-	  disbuff[2]=10;	   //¡°-¡±
+	  disbuff[0]=10;	   //â€œ-â€
+	  disbuff[1]=10;	   //â€œ-â€
+	  disbuff[2]=10;	   //â€œ-â€
 	 }
 	 else
 	 {
@@ -64,12 +64,12 @@ unsigned char disbuff[4]	   ={ 0,0,0,0,};
 	 }
 	}
 /********************************************************/
-     void zd0() interrupt 1 		 //T0ÖÐ¶ÏÓÃÀ´¼ÆÊýÆ÷Òç³ö,³¬¹ý²â¾à·¶Î§
+     void zd0() interrupt 1 		 //T0ä¸­æ–­ç”¨æ¥è®¡æ•°å™¨æº¢å‡º,è¶…è¿‡æµ‹è·èŒƒå›´
   {
-    flag=1;							 //ÖÐ¶ÏÒç³ö±êÖ¾
+    flag=1;							 //ä¸­æ–­æº¢å‡ºæ ‡å¿—
   }
 /********************************************************/
-   void  zd3()  interrupt 3 		 //T1ÖÐ¶ÏÓÃÀ´É¨ÃèÊýÂë¹ÜºÍ¼Æ800MSÆô¶¯Ä£¿é
+   void  zd3()  interrupt 3 		 //T1ä¸­æ–­ç”¨æ¥æ‰«ææ•°ç ç®¡å’Œè®¡800MSå¯åŠ¨æ¨¡å—
   {
 	 TH1=0xf8;
 	 TL1=0x30;
@@ -78,7 +78,7 @@ unsigned char disbuff[4]	   ={ 0,0,0,0,};
 	 if(timer>=400)
 	 {
 	  timer=0;
-	  TX=1;			                //800MS  Æô¶¯Ò»´ÎÄ£¿é
+	  TX=1;			                //800MS  å¯åŠ¨ä¸€æ¬¡æ¨¡å—
 	  _nop_(); 
 	  _nop_(); 
 	  _nop_(); 
@@ -108,23 +108,23 @@ unsigned char disbuff[4]	   ={ 0,0,0,0,};
 	void  main(  void  )
 
   {  
-    TMOD=0x11;		   //ÉèT0Îª·½Ê½1£¬GATE=1£»
+    TMOD=0x11;		   //è®¾T0ä¸ºæ–¹å¼1ï¼ŒGATE=1ï¼›
 	TH0=0;
 	TL0=0;          
-	TH1=0xf8;		   //2MS¶¨Ê±
+	TH1=0xf8;		   //2MSå®šæ—¶
 	TL1=0x30;
-	ET0=1;             //ÔÊÐíT0ÖÐ¶Ï
-	ET1=1;			   //ÔÊÐíT1ÖÐ¶Ï
-	TR1=1;			   //¿ªÆô¶¨Ê±Æ÷
-	EA=1;			   //¿ªÆô×ÜÖÐ¶Ï
+	ET0=1;             //å…è®¸T0ä¸­æ–­
+	ET1=1;			   //å…è®¸T1ä¸­æ–­
+	TR1=1;			   //å¼€å¯å®šæ—¶å™¨
+	EA=1;			   //å¼€å¯æ€»ä¸­æ–­
 
 	while(1)
 	{
-	 while(!RX);		//µ±RXÎªÁãÊ±µÈ´ý
-	 TR0=1;			    //¿ªÆô¼ÆÊý
-	 while(RX);			//µ±RXÎª1¼ÆÊý²¢µÈ´ý
-	 TR0=0;				//¹Ø±Õ¼ÆÊý
-     Conut();			//¼ÆËã
+	 while(!RX);		//å½“RXä¸ºé›¶æ—¶ç­‰å¾…
+	 TR0=1;			    //å¼€å¯è®¡æ•°
+	 while(RX);			//å½“RXä¸º1è®¡æ•°å¹¶ç­‰å¾…
+	 TR0=0;				//å…³é—­è®¡æ•°
+     Conut();			//è®¡ç®—
 	}
 
   }

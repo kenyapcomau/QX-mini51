@@ -1,26 +1,26 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MCS51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52RC
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio4	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º ÊýÂë¹ÜÏÔÊ¾ºìÍâ¼üÂëÖµ0-9 			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º Ê¹ÓÃºìÍâ½ÓÊÕÊ±£¬Ó¦½«ºìÍâ½ÓÊÕÍ·²åµ½¿ª·¢°åÖ¸¶¨Î»ÖÃ£¬×¢Òâ·½Ïò£¬
-				 ¿ª·¢°åÉÏÓÐ»¡ÃæÌáÊ¾	 ,ºìÍâ½ÓÊÕÍ·Ô²»¡ÃæÃæÏò¿ª·¢°åÍâ²¿
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MCS51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52RC
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio4	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š æ•°ç ç®¡æ˜¾ç¤ºçº¢å¤–é”®ç å€¼0-9 			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š ä½¿ç”¨çº¢å¤–æŽ¥æ”¶æ—¶ï¼Œåº”å°†çº¢å¤–æŽ¥æ”¶å¤´æ’åˆ°å¼€å‘æ¿æŒ‡å®šä½ç½®ï¼Œæ³¨æ„æ–¹å‘ï¼Œ
+				 å¼€å‘æ¿ä¸Šæœ‰å¼§é¢æç¤º	 ,çº¢å¤–æŽ¥æ”¶å¤´åœ†å¼§é¢é¢å‘å¼€å‘æ¿å¤–éƒ¨
 **********************************************************************************/
 
-/*Ô¤´¦ÀíÃüÁî*/
-#include<reg52.h>    //°üº¬µ¥Æ¬»ú¼Ä´æÆ÷µÄÍ·ÎÄ¼þ
-#include<intrins.h> //°üº¬_nop_()º¯Êý¶¨ÒåµÄÍ·ÎÄ¼þ
+/*é¢„å¤„ç†å‘½ä»¤*/
+#include<reg52.h>    //åŒ…å«å•ç‰‡æœºå¯„å­˜å™¨çš„å¤´æ–‡ä»¶
+#include<intrins.h> //åŒ…å«_nop_()å‡½æ•°å®šä¹‰çš„å¤´æ–‡ä»¶
 #define uchar unsigned char
 #define uint  unsigned int
 #define delayNOP(); {_nop_();_nop_();_nop_();_nop_();};
 
-sbit IRIN=P3^2;         //ºìÍâ½ÓÊÕÆ÷Êý¾ÝÏß
+sbit IRIN=P3^2;         //çº¢å¤–æŽ¥æ”¶å™¨æ•°æ®çº¿
 
 
 sbit P2_0 = P2^0;
@@ -46,9 +46,9 @@ void main()
 {
 	 unsigned int  a;
    
-	IRIN=1;                    //I/O¿Ú³õÊ¼»¯	
-	IE=0x81;                 //ÔÊÐí×ÜÖÐ¶ÏÖÐ¶Ï,Ê¹ÄÜ INT0 Íâ²¿ÖÐ¶Ï
-	TCON=TCON|0x01;               //´¥·¢·½Ê½ÎªÂö³å¸º±ßÑØ´¥·¢
+	IRIN=1;                    //I/Oå£åˆå§‹åŒ–	
+	IE=0x81;                 //å…è®¸æ€»ä¸­æ–­ä¸­æ–­,ä½¿èƒ½ INT0 å¤–éƒ¨ä¸­æ–­
+	TCON=TCON|0x01;               //è§¦å‘æ–¹å¼ä¸ºè„‰å†²è´Ÿè¾¹æ²¿è§¦å‘
 	
 	 while(1)
 	 {
@@ -75,19 +75,19 @@ void IR_IN() interrupt 0 using 0
 		EX0 =1;
 		return;
 	} 
-	           //È·ÈÏIRÐÅºÅ³öÏÖ
-	while (!IRIN)            //µÈIR±äÎª¸ßµçÆ½£¬Ìø¹ý9msµÄÇ°µ¼µÍµçÆ½ÐÅºÅ¡£
+	           //ç¡®è®¤IRä¿¡å·å‡ºçŽ°
+	while (!IRIN)            //ç­‰IRå˜ä¸ºé«˜ç”µå¹³ï¼Œè·³è¿‡9msçš„å‰å¯¼ä½Žç”µå¹³ä¿¡å·ã€‚
 		delay(1);
 	
-	for (j=0;j<4;j++)         //ÊÕ¼¯ËÄ×éÊý¾Ý
+	for (j=0;j<4;j++)         //æ”¶é›†å››ç»„æ•°æ®
 	{ 
-		for (k=0;k<8;k++)        //Ã¿×éÊý¾ÝÓÐ8Î»
+		for (k=0;k<8;k++)        //æ¯ç»„æ•°æ®æœ‰8ä½
 		{
-			while (IRIN)            //µÈ IR ±äÎªµÍµçÆ½£¬Ìø¹ý4.5msµÄÇ°µ¼¸ßµçÆ½ÐÅºÅ¡£
+			while (IRIN)            //ç­‰ IR å˜ä¸ºä½Žç”µå¹³ï¼Œè·³è¿‡4.5msçš„å‰å¯¼é«˜ç”µå¹³ä¿¡å·ã€‚
 			{delay(1);}
-			while (!IRIN)          //µÈ IR ±äÎª¸ßµçÆ½
+			while (!IRIN)          //ç­‰ IR å˜ä¸ºé«˜ç”µå¹³
 				delay(1);
-			while (IRIN)           //¼ÆËãIR¸ßµçÆ½Ê±³¤
+			while (IRIN)           //è®¡ç®—IRé«˜ç”µå¹³æ—¶é•¿
 			{
 				delay(1);
 				N++;           
@@ -95,12 +95,12 @@ void IR_IN() interrupt 0 using 0
 				{ 
 					EX0=1;
 					return;
-				}                  //0.14ms¼ÆÊý¹ý³¤×Ô¶¯Àë¿ª¡£
-			}                        //¸ßµçÆ½¼ÆÊýÍê±Ï                
-			IRCOM[j]=IRCOM[j] >> 1;     //Êý¾Ý×î¸ßÎ»²¹¡°0¡±
+				}                  //0.14msè®¡æ•°è¿‡é•¿è‡ªåŠ¨ç¦»å¼€ã€‚
+			}                        //é«˜ç”µå¹³è®¡æ•°å®Œæ¯•                
+			IRCOM[j]=IRCOM[j] >> 1;     //æ•°æ®æœ€é«˜ä½è¡¥â€œ0â€
 			if(N>=8)
 			{
-				IRCOM[j] = IRCOM[j] | 0x80;		  //Êý¾Ý×î¸ßÎ»²¹¡°1¡±
+				IRCOM[j] = IRCOM[j] | 0x80;		  //æ•°æ®æœ€é«˜ä½è¡¥â€œ1â€
 			}  
 			N=0;
 		}
@@ -112,8 +112,8 @@ void IR_IN() interrupt 0 using 0
 		return; 
 	}
 	
-	IRCOM[5]=IRCOM[2] & 0x0F;     //È¡¼üÂëµÄµÍËÄÎ»
-	IRCOM[6]=IRCOM[2] >> 4;       //ÓÒÒÆ4´Î£¬¸ßËÄÎ»±äÎªµÍËÄÎ»
+	IRCOM[5]=IRCOM[2] & 0x0F;     //å–é”®ç çš„ä½Žå››ä½
+	IRCOM[6]=IRCOM[2] >> 4;       //å³ç§»4æ¬¡ï¼Œé«˜å››ä½å˜ä¸ºä½Žå››ä½
 	
 	if(IRCOM[5]>9)
 	{ 
@@ -132,18 +132,18 @@ void IR_IN() interrupt 0 using 0
 	q= (((IRCOM[6]&0x0f)<<4) + (IRCOM[5]&0x0f));
     
 
-	switch(q)    //ÅÐ¶Ï°´¼ü¼üÂëÖµ
+	switch(q)    //åˆ¤æ–­æŒ‰é”®é”®ç å€¼
 	{
-		case 0x16:m=0;break; //´®¿Ú·¢ËÍ0
-		case 0x03:m=1;break;  //´®¿Ú·¢ËÍ01
-		case 0x18:m=2;break;  //´®¿Ú·¢ËÍ02
-		case 0x55:m=3;break;  //´®¿Ú·¢ËÍ03
-		case 0x08:m=4;break;  //´®¿Ú·¢ËÍ04
-		case 0x13:m=5;break;  //´®¿Ú·¢ËÍ05
-		case 0x51:m=6;break;  //´®¿Ú·¢ËÍ06
-		case 0x42:m=7;break;  //´®¿Ú·¢ËÍ07
-		case 0x52:m=8;break;  //´®¿Ú·¢ËÍ08
-		case 0x41:m=9;break;  //´®¿Ú·¢ËÍ09
+		case 0x16:m=0;break; //ä¸²å£å‘é€0
+		case 0x03:m=1;break;  //ä¸²å£å‘é€01
+		case 0x18:m=2;break;  //ä¸²å£å‘é€02
+		case 0x55:m=3;break;  //ä¸²å£å‘é€03
+		case 0x08:m=4;break;  //ä¸²å£å‘é€04
+		case 0x13:m=5;break;  //ä¸²å£å‘é€05
+		case 0x51:m=6;break;  //ä¸²å£å‘é€06
+		case 0x42:m=7;break;  //ä¸²å£å‘é€07
+		case 0x52:m=8;break;  //ä¸²å£å‘é€08
+		case 0x41:m=9;break;  //ä¸²å£å‘é€09
 	
 		default :break; 
 	}
@@ -152,7 +152,7 @@ void IR_IN() interrupt 0 using 0
 }
 
 
-/***************ÑÓÊ±º¯Êý*****************************/
+/***************å»¶æ—¶å‡½æ•°*****************************/
 void delay(unsigned char x)    //x*0.14MS
 {
 	unsigned char i;
@@ -193,6 +193,6 @@ void delay1(int ms)
 void delay1ms()
 {
  unsigned int i;
- for(i=8024;i>0;i--);  //ÑÓÊ±124*8+10=1002us
+ for(i=8024;i>0;i--);  //å»¶æ—¶124*8+10=1002us
 }
 

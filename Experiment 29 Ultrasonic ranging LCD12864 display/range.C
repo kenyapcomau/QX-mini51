@@ -1,34 +1,34 @@
 /*********************************************************************************
-* ¡¾±àĞ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MINI51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØĞ¾Æ¬¡¿£º STC89C52
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio3	
-* ¡¾³ÌĞò¹¦ÄÜ¡¿£º LCD12864(St7920/St7921)+³¬Éù²¨²â¾àÄ£¿é+STC89C52  		   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º 
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®éªŒå¹³å°ã€‘ï¼š QX-MINI51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æ§èŠ¯ç‰‡ã€‘ï¼š STC89C52
+* ã€ç¼–è¯‘ç¯å¢ƒã€‘ï¼š Keil Î¼Visio3	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š LCD12864(St7920/St7921)+è¶…å£°æ³¢æµ‹è·æ¨¡å—+STC89C52  		   			            			    
+* ã€ä½¿ç”¨è¯´æ˜ã€‘ï¼š 
 
-/*  ½ÓÏß£ºÄ£¿éTRIG½Ó P1.2  ECH0 ½ÓP1.1										  */
-/*      RS(CS)    ½Ó  P0.7;	 											      */
-/*      RW(SID)   ½Ó  P0.6;										              */
-/*      E(SCLK)   ½Ó  P0.5;											          */
-/*      PSB       ½Ó  GND ´®ĞĞÄ£Ê½	
+/*  æ¥çº¿ï¼šæ¨¡å—TRIGæ¥ P1.2  ECH0 æ¥P1.1										  */
+/*      RS(CS)    æ¥  P0.7;	 											      */
+/*      RW(SID)   æ¥  P0.6;										              */
+/*      E(SCLK)   æ¥  P0.5;											          */
+/*      PSB       æ¥  GND ä¸²è¡Œæ¨¡å¼	
 **********************************************************************************/
 
     #include   <AT89X51.H>
 	#include   <intrins.h>	
-//Òı½Å¶¨Òå
+//å¼•è„šå®šä¹‰
     sbit     RX    =  P1 ^ 1;
     sbit     TX    =  P1 ^ 2;
-    sbit     CS    =  P0 ^ 7;	//Æ¬Ñ¡ ¸ßµçÆ½ÓĞĞ§ µ¥Æ¬LCDÊ¹ÓÃÊ±¿É¹Ì¶¨¸ßµçÆ½
-    sbit     SID   =  P0 ^ 6;	//Êı¾İ
-    sbit     SCLK  =  P0 ^ 5;	//Ê±ÖÓ
+    sbit     CS    =  P0 ^ 7;	//ç‰‡é€‰ é«˜ç”µå¹³æœ‰æ•ˆ å•ç‰‡LCDä½¿ç”¨æ—¶å¯å›ºå®šé«˜ç”µå¹³
+    sbit     SID   =  P0 ^ 6;	//æ•°æ®
+    sbit     SCLK  =  P0 ^ 5;	//æ—¶é’Ÿ
 	sbit     PSB   =  P0 ^ 4;	//PSB
 
-//Function Definition¡¡º¯ÊıÉùÃ÷ 
+//Function Definitionã€€å‡½æ•°å£°æ˜ 
 void Delay(int num);
 void Init_DS18B20(void);
 unsigned char ReadOneChar(void);
@@ -55,18 +55,18 @@ void Disp_img(unsigned char *img);
 void LCD_Write_string(unsigned char X,unsigned char Y,unsigned char *s);
 void LCD_set_xy( unsigned char x, unsigned char y );
 unsigned char code num[]={"0123456789 :.-"};
-unsigned char code waves[]={"³¬Éù²¨²â¾àÏµÍ³"};
-unsigned char code znwk[] ={"ÇåÏèµç×Ó¿Æ¼¼  "};
+unsigned char code waves[]={"è¶…å£°æ³¢æµ‹è·ç³»ç»Ÿ"};
+unsigned char code znwk[] ={"æ¸…ç¿”ç”µå­ç§‘æŠ€  "};
 unsigned char code CM[] =  {"M"};
 unsigned int  time=0;
          long S=0;
          bit  flag =0;
 unsigned char disbuff[4]	   ={ 0,0,0,0,};
 unsigned char code logo[]={  
-/*--  µ÷ÈëÁËÒ»·ùÍ¼Ïñ£ºlogo.bmp  -- */ 
-/*--  ¿í¶Èx¸ß¶È=128x64 »¶Ó­Ê¹ÓÃ±¾²úÆ·LOGO --*/
-/*--  µ÷ÈëÁËÒ»·ùÍ¼Ïñ£ºC:\Documents and Settings\lwd\×ÀÃæ\ĞÂ½¨ÎÄ¼ş¼Ğ\X.bmp  --*/
-/*--  ¿í¶Èx¸ß¶È=128x64  --*/
+/*--  è°ƒå…¥äº†ä¸€å¹…å›¾åƒï¼šlogo.bmp  -- */ 
+/*--  å®½åº¦xé«˜åº¦=128x64 æ¬¢è¿ä½¿ç”¨æœ¬äº§å“LOGO --*/
+/*--  è°ƒå…¥äº†ä¸€å¹…å›¾åƒï¼šC:\Documents and Settings\lwd\æ¡Œé¢\æ–°å»ºæ–‡ä»¶å¤¹\X.bmp  --*/
+/*--  å®½åº¦xé«˜åº¦=128x64  --*/
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -134,50 +134,50 @@ unsigned char code logo[]={
 };
 
 /******************************************************************************/
-void Lcd_init(void)	//³õÊ¼»¯LCD 
+void Lcd_init(void)	//åˆå§‹åŒ–LCD 
 {
 	PSB = 0;
-	Delaynms(10); //Æô¶¯µÈ´ı£¬µÈLCM½²Èë¹¤×÷×´Ì¬
+	Delaynms(10); //å¯åŠ¨ç­‰å¾…ï¼Œç­‰LCMè®²å…¥å·¥ä½œçŠ¶æ€
   	CS=1;
-  	Write_char(0,0x30);  //8 Î»½éÃæ£¬»ù±¾Ö¸Áî¼¯
-  	Write_char(0,0x0c);  //ÏÔÊ¾´ò¿ª£¬¹â±ê¹Ø£¬·´°×¹Ø
-  	Write_char(0,0x01);  //ÇåÆÁ£¬½«DDRAMµÄµØÖ·¼ÆÊıÆ÷¹éÁã  
+  	Write_char(0,0x30);  //8 ä½ä»‹é¢ï¼ŒåŸºæœ¬æŒ‡ä»¤é›†
+  	Write_char(0,0x0c);  //æ˜¾ç¤ºæ‰“å¼€ï¼Œå…‰æ ‡å…³ï¼Œåç™½å…³
+  	Write_char(0,0x01);  //æ¸…å±ï¼Œå°†DDRAMçš„åœ°å€è®¡æ•°å™¨å½’é›¶  
 }
 
 /******************************************************************************/
-void Write_char(bit start, unsigned char ddata) //Ğ´Ö¸Áî»òÊı¾İ
+void Write_char(bit start, unsigned char ddata) //å†™æŒ‡ä»¤æˆ–æ•°æ®
 {
 	unsigned char start_data,Hdata,Ldata;
   	if(start==0) 
-		start_data=0xf8;	 //Ğ´Ö¸Áî
+		start_data=0xf8;	 //å†™æŒ‡ä»¤
     else    
-    	start_data=0xfa;  //Ğ´Êı¾İ
+    	start_data=0xfa;  //å†™æ•°æ®
   
-  	Hdata=ddata&0xf0;		  //È¡¸ßËÄÎ»
-  	Ldata=(ddata<<4)&0xf0;  //È¡µÍËÄÎ»
-  	Send_byte(start_data);	  //·¢ËÍÆğÊ¼ĞÅºÅ
-  	Delaynms(5); //ÑÓÊ±ÊÇ±ØĞëµÄ
-  	Send_byte(Hdata);	      //·¢ËÍ¸ßËÄÎ»
-  	Delaynms(1);  //ÑÓÊ±ÊÇ±ØĞëµÄ
-  	Send_byte(Ldata);		  //·¢ËÍµÍËÄÎ»
-  	Delaynms(1);  //ÑÓÊ±ÊÇ±ØĞëµÄ
+  	Hdata=ddata&0xf0;		  //å–é«˜å››ä½
+  	Ldata=(ddata<<4)&0xf0;  //å–ä½å››ä½
+  	Send_byte(start_data);	  //å‘é€èµ·å§‹ä¿¡å·
+  	Delaynms(5); //å»¶æ—¶æ˜¯å¿…é¡»çš„
+  	Send_byte(Hdata);	      //å‘é€é«˜å››ä½
+  	Delaynms(1);  //å»¶æ—¶æ˜¯å¿…é¡»çš„
+  	Send_byte(Ldata);		  //å‘é€ä½å››ä½
+  	Delaynms(1);  //å»¶æ—¶æ˜¯å¿…é¡»çš„
 }
 
 /******************************************************************************/
-void Send_byte(unsigned char bbyte) //·¢ËÍÒ»¸ö×Ö½Ú
+void Send_byte(unsigned char bbyte) //å‘é€ä¸€ä¸ªå­—èŠ‚
 {
 	unsigned char i;
  	for(i=0;i<8;i++)
    	{
-   		SID=bbyte&0x80; //È¡³ö×î¸ßÎ»
+   		SID=bbyte&0x80; //å–å‡ºæœ€é«˜ä½
  		SCLK=1;
    		SCLK=0;
-   		bbyte<<=1; //×óÒÆ
+   		bbyte<<=1; //å·¦ç§»
    	}  
 }
 
 /******************************************************************************/
-void Delaynms(unsigned int di) //ÑÓÊ±
+void Delaynms(unsigned int di) //å»¶æ—¶
 {
 	unsigned int da,db;
  	for(da=0;da<di;da++)
@@ -185,12 +185,12 @@ void Delaynms(unsigned int di) //ÑÓÊ±
 }
 
 /******************************************************************************/
-void Disp_img(unsigned char  *img)	//Í¼ĞÎ·½Ê½12864ÏÔÊ¾×ÖÄ£221 ºáÏòÈ¡Ä¤
+void Disp_img(unsigned char  *img)	//å›¾å½¢æ–¹å¼12864æ˜¾ç¤ºå­—æ¨¡221 æ¨ªå‘å–è†œ
 { 
 	unsigned char i,j;
 	unsigned int k = 0;
 
-	Write_char(0,0x36); //Í¼ĞÎ·½Ê½
+	Write_char(0,0x36); //å›¾å½¢æ–¹å¼
 	for(i=0;i<32;i++)
   	{ 
 		Write_char(0,0x80+i);
@@ -213,14 +213,14 @@ void Disp_img(unsigned char  *img)	//Í¼ĞÎ·½Ê½12864ÏÔÊ¾×ÖÄ£221 ºáÏòÈ¡Ä¤
 }
 	
 /******************************************************************************/
-void Clr_Scr(void)//ÇåÆÁº¯Êı
+void Clr_Scr(void)//æ¸…å±å‡½æ•°
 {
 	Write_char(0,0x01);
 }
 
 /******************************************************************************/
 void LCD_set_xy( unsigned char x, unsigned char y )
-{	//ÉèÖÃLCDÏÔÊ¾µÄÆğÊ¼Î»ÖÃ£¬XÎªĞĞ£¬YÎªÁĞ
+{	//è®¾ç½®LCDæ˜¾ç¤ºçš„èµ·å§‹ä½ç½®ï¼ŒXä¸ºè¡Œï¼ŒYä¸ºåˆ—
     unsigned char address;
 	switch(x)
 	{
@@ -236,7 +236,7 @@ void LCD_set_xy( unsigned char x, unsigned char y )
 
 /******************************************************************************/
 void LCD_Write_string(unsigned char X,unsigned char Y,unsigned char *s)
-{	//	ÖĞÓ¢ÎÄ×Ö·û´®ÏÔÊ¾º¯Êı
+{	//	ä¸­è‹±æ–‡å­—ç¬¦ä¸²æ˜¾ç¤ºå‡½æ•°
 	LCD_set_xy( X, Y );
     
     while (*s) 
@@ -248,7 +248,7 @@ void LCD_Write_string(unsigned char X,unsigned char Y,unsigned char *s)
 }
 
 /******************************************************************************/
-void LCD_Write_number(unsigned char s)//	Êı×ÖÏÔÊ¾º¯Êı
+void LCD_Write_number(unsigned char s)//	æ•°å­—æ˜¾ç¤ºå‡½æ•°
 {	
 	Write_char(1,num[s]);
 	Delaynms(1);
@@ -256,7 +256,7 @@ void LCD_Write_number(unsigned char s)//	Êı×ÖÏÔÊ¾º¯Êı
 /******************************************************************************/
 void Lcd_Mark2(void)
 {
-	Clr_Scr();//ÇåÆÁ
+	Clr_Scr();//æ¸…å±
 	LCD_Write_string(1,0,znwk);//
 	LCD_Write_string(2,0,waves);//	
 	LCD_Write_string(3,7,CM);//	
@@ -268,8 +268,8 @@ void Lcd_Mark2(void)
 	   time=TH0*256+TL0;
 	   TH0=0;
 	   TL0=0;
-	   S=time*1.87/100;       //Ëã³öÀ´ÊÇCM	  11¡£0592M¾§Õñ
-	   if(flag==1)		      //³¬³ö²âÁ¿
+	   S=time*1.87/100;       //ç®—å‡ºæ¥æ˜¯CM	  11ã€‚0592Mæ™¶æŒ¯
+	   if(flag==1)		      //è¶…å‡ºæµ‹é‡
 	  {	 
 	   flag=0;
 	   LCD_set_xy( 3, 4 );
@@ -307,14 +307,14 @@ void delayms(unsigned int ms)
 	}
 }
 /********************************************************/
-     void zd0() interrupt 1 		 //T0ÖĞ¶ÏÓÃÀ´¼ÆÊıÆ÷Òç³ö,³¬¹ı²â¾à·¶Î§
+     void zd0() interrupt 1 		 //T0ä¸­æ–­ç”¨æ¥è®¡æ•°å™¨æº¢å‡º,è¶…è¿‡æµ‹è·èŒƒå›´
   {
-    flag=1;							 //ÖĞ¶ÏÒç³ö±êÖ¾
+    flag=1;							 //ä¸­æ–­æº¢å‡ºæ ‡å¿—
   }
 /********************************************************/
-   void  StartModule() 		         //T1ÖĞ¶ÏÓÃÀ´É¨ÃèÊıÂë¹ÜºÍ¼Æ800MSÆô¶¯Ä£¿é
+   void  StartModule() 		         //T1ä¸­æ–­ç”¨æ¥æ‰«ææ•°ç ç®¡å’Œè®¡800MSå¯åŠ¨æ¨¡å—
   {
-	  TX=1;			                 //800MS  Æô¶¯Ò»´ÎÄ£¿é
+	  TX=1;			                 //800MS  å¯åŠ¨ä¸€æ¬¡æ¨¡å—
 	  _nop_(); 
 	  _nop_(); 
 	  _nop_(); 
@@ -341,27 +341,27 @@ void delayms(unsigned int ms)
 /********************************************************/
 void main(void)
 {  
-    TMOD=0x01;		   //ÉèT0Îª·½Ê½1£¬GATE=1
+    TMOD=0x01;		   //è®¾T0ä¸ºæ–¹å¼1ï¼ŒGATE=1
 	TH0=0;
 	TL0=0; 
 	TR0=1; 
 
-	Lcd_init();       //ÉèÖÃÒº¾§ÏÔÊ¾Æ÷
-	Clr_Scr();        //ÇåÆÁ	
-	Disp_img(logo);	  //ÏÔÊ¾»¶Ó­Ê¹ÓÃ±¾²úÆ·LOGO
+	Lcd_init();       //è®¾ç½®æ¶²æ™¶æ˜¾ç¤ºå™¨
+	Clr_Scr();        //æ¸…å±	
+	Disp_img(logo);	  //æ˜¾ç¤ºæ¬¢è¿ä½¿ç”¨æœ¬äº§å“LOGO
 	Delaynms(10000);
-	Lcd_init();       //´ÓÍ¼ĞÎÏÔÊ¾×´Ì¬ÏÂ·µ»Ø
+	Lcd_init();       //ä»å›¾å½¢æ˜¾ç¤ºçŠ¶æ€ä¸‹è¿”å›
     Lcd_Mark2();
 
 
 	while(1)
 	{
 	 StartModule();	 
-	 		        	//¼ÆËã
-	 while(!RX);		//µ±RXÎªÁãÊ±µÈ´ı
-	 TR0=1;			    //¿ªÆô¼ÆÊı
-	 while(RX);			//µ±RXÎª1¼ÆÊı²¢µÈ´ı
-	 TR0=0;				//¹Ø±Õ¼ÆÊı
+	 		        	//è®¡ç®—
+	 while(!RX);		//å½“RXä¸ºé›¶æ—¶ç­‰å¾…
+	 TR0=1;			    //å¼€å¯è®¡æ•°
+	 while(RX);			//å½“RXä¸º1è®¡æ•°å¹¶ç­‰å¾…
+	 TR0=0;				//å…³é—­è®¡æ•°
 	 Conut();
 	 delayms(80);		//80MS
 

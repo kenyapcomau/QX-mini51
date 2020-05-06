@@ -1,28 +1,28 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MCS51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52RC
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio4	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º ÎÞÔ´·äÃùÆ÷²âÊÔ-°ËÔÂ¹ð»¨			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º ¶Ì½Ó·äÃùÆ÷J1ÌøÃ±
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MCS51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52RC
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio4	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š æ— æºèœ‚é¸£å™¨æµ‹è¯•-å…«æœˆæ¡‚èŠ±			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š çŸ­æŽ¥èœ‚é¸£å™¨J1è·³å¸½
 **********************************************************************************/
 
 #include <reg52.h>    
 #include <intrins.h>    
-//¹ØÓÚÈçºÎ±àÖÆÒôÀÖ´úÂë, ÆäÊµÊ®·Ö¼òµ¥,¸÷Î»¿ÉÒÔ¿´ÒÔÏÂ´úÂë.    
-//ÆµÂÊ³£Êý¼´ÒôÀÖÊõÓïÖÐµÄÒôµ÷,¶ø½ÚÅÄ³£Êý¼´ÒôÀÖÊõÓïÖÐµÄ¶àÉÙÅÄ;    
-//ËùÒÔÄÃ³öÆ××Ó, ÊÔÌ½±à°É!    
+//å…³äºŽå¦‚ä½•ç¼–åˆ¶éŸ³ä¹ä»£ç , å…¶å®žååˆ†ç®€å•,å„ä½å¯ä»¥çœ‹ä»¥ä¸‹ä»£ç .    
+//é¢‘çŽ‡å¸¸æ•°å³éŸ³ä¹æœ¯è¯­ä¸­çš„éŸ³è°ƒ,è€ŒèŠ‚æ‹å¸¸æ•°å³éŸ³ä¹æœ¯è¯­ä¸­çš„å¤šå°‘æ‹;    
+//æ‰€ä»¥æ‹¿å‡ºè°±å­, è¯•æŽ¢ç¼–å§!    
 
 sbit Beep =  P3^6 ; 
    
-unsigned char n=0;  //nÎª½ÚÅÄ³£Êý±äÁ¿    
+unsigned char n=0;  //nä¸ºèŠ‚æ‹å¸¸æ•°å˜é‡    
 unsigned char code music_tab[] ={   
-0x18, 0x30, 0x1C , 0x10, //¸ñÊ½Îª: ÆµÂÊ³£Êý, ½ÚÅÄ³£Êý, ÆµÂÊ³£Êý, ½ÚÅÄ³£Êý,    
+0x18, 0x30, 0x1C , 0x10, //æ ¼å¼ä¸º: é¢‘çŽ‡å¸¸æ•°, èŠ‚æ‹å¸¸æ•°, é¢‘çŽ‡å¸¸æ•°, èŠ‚æ‹å¸¸æ•°,    
 0x20, 0x40, 0x1C , 0x10,   
 0x18, 0x10, 0x20 , 0x10,   
 0x1C, 0x10, 0x18 , 0x40,   
@@ -72,18 +72,18 @@ unsigned char code music_tab[] ={
 0x18, 0x80, 0x00   
 };   
   
-void delay (unsigned char m)   //¿ØÖÆÆµÂÊÑÓÊ±    
+void delay (unsigned char m)   //æŽ§åˆ¶é¢‘çŽ‡å»¶æ—¶    
 {   
  unsigned i=3*m;   
  while(--i);   
 }   
-void delayms(unsigned char a)  //ºÀÃëÑÓÊ±×Ó³ÌÐò    
+void delayms(unsigned char a)  //è±ªç§’å»¶æ—¶å­ç¨‹åº    
 {   
   while(--a);     
 }    
 void main()   
 { 
-	unsigned char p,m;   //mÎªÆµÂÊ³£Êý±äÁ¿    
+	unsigned char p,m;   //mä¸ºé¢‘çŽ‡å¸¸æ•°å˜é‡    
 	unsigned char i=0;   
 	TMOD&=0x0f;   
 	TMOD|=0x01;   
@@ -95,27 +95,27 @@ play:
 	a:  p=music_tab[i];   
 		if(p==0x00)       
 		{ 
-			i=0, delayms(1000); goto play; //Èç¹ûÅöµ½½áÊø·û,ÑÓÊ±1Ãë,»Øµ½¿ªÊ¼ÔÙÀ´Ò»±é  
+			i=0, delayms(1000); goto play; //å¦‚æžœç¢°åˆ°ç»“æŸç¬¦,å»¶æ—¶1ç§’,å›žåˆ°å¼€å§‹å†æ¥ä¸€é  
 		}       
 		else 
 			if(p==0xff)  
 			{ 
-				i=i+1;delayms(100),TR0=0; goto a;  //ÈôÅöµ½ÐÝÖ¹·û,ÑÓÊ±100ms,¼ÌÐøÈ¡ÏÂÒ»Òô·û
+				i=i+1;delayms(100),TR0=0; goto a;  //è‹¥ç¢°åˆ°ä¼‘æ­¢ç¬¦,å»¶æ—¶100ms,ç»§ç»­å–ä¸‹ä¸€éŸ³ç¬¦
 			}      
 			else
 			{
-				m=music_tab[i++], n=music_tab[i++];	 //È¡ÆµÂÊ³£Êý ºÍ ½ÚÅÄ³£Êý
+				m=music_tab[i++], n=music_tab[i++];	 //å–é¢‘çŽ‡å¸¸æ•° å’Œ èŠ‚æ‹å¸¸æ•°
 			}      
-			TR0=1;                                             //¿ª¶¨Ê±Æ÷0    
-		while(n!=0) 		   //µÈ´ý½ÚÅÄÍê³É,Êä³öÒôÆµ  
+			TR0=1;                                             //å¼€å®šæ—¶å™¨0    
+		while(n!=0) 		   //ç­‰å¾…èŠ‚æ‹å®Œæˆ,è¾“å‡ºéŸ³é¢‘  
 		{
 			Beep=~Beep;
 			delay(m);    
 		} 
-		TR0=0;                                             //¹Ø¶¨Ê±Æ÷0    
+		TR0=0;                                             //å…³å®šæ—¶å™¨0    
     }   
 } 
-void int0() interrupt 1   //²ÉÓÃÖÐ¶Ï¶¨Ê±Æ÷0 ¿ØÖÆ½ÚÅÄ    
+void int0() interrupt 1   //é‡‡ç”¨ä¸­æ–­å®šæ—¶å™¨0 æŽ§åˆ¶èŠ‚æ‹    
 {  
 	TH0=0xd8;   
 	TL0=0xef;   

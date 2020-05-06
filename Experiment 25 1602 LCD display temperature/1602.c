@@ -1,18 +1,18 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MCS51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52RC
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio4	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º 1602Òº¾§ÏÔÊ¾ÎÂ¶È			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º 1.Ê¹ÓÃ1602Òº¾§Ç°ÏÈ°ÎµôÊýÂë¹ÜJ6ÌøÃ±£¬ÊýÂë¹ÜÓëÒº¾§²»ÄÜ¹²ÓÃ
-                 2.½«1602Òº¾§½Óµ½L2ÅÅÄ¸ÉÏ£¬Òº¾§ÃæÏò¿ª·¢°åÍâ²¿
-				 3.Èô³ÌÐòÉÕÐ´Íê³Éºó£¬1602Òº¾§ÎÞÏÔÊ¾£¬Çëµ÷½Ú¿ª·¢°åÓÒÏÂ·½µÄµçÎ»Æ÷RV1	
-				 4.×¢Òâ18B20²å½Ó·´Ïò£¬»¡ÐÎÃæÏò¿ª·¢°åÍâ£¡
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MCS51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52RC
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio4	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š 1602æ¶²æ™¶æ˜¾ç¤ºæ¸©åº¦			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š 1.ä½¿ç”¨1602æ¶²æ™¶å‰å…ˆæ‹”æŽ‰æ•°ç ç®¡J6è·³å¸½ï¼Œæ•°ç ç®¡ä¸Žæ¶²æ™¶ä¸èƒ½å…±ç”¨
+                 2.å°†1602æ¶²æ™¶æŽ¥åˆ°L2æŽ’æ¯ä¸Šï¼Œæ¶²æ™¶é¢å‘å¼€å‘æ¿å¤–éƒ¨
+				 3.è‹¥ç¨‹åºçƒ§å†™å®ŒæˆåŽï¼Œ1602æ¶²æ™¶æ— æ˜¾ç¤ºï¼Œè¯·è°ƒèŠ‚å¼€å‘æ¿å³ä¸‹æ–¹çš„ç”µä½å™¨RV1	
+				 4.æ³¨æ„18B20æ’æŽ¥åå‘ï¼Œå¼§å½¢é¢å‘å¼€å‘æ¿å¤–ï¼
 **********************************************************************************/
 
 #include <reg52.H>
@@ -28,8 +28,8 @@ sbit rw=P0^6;
 sbit  BEEP=P3^6;
 
 /*********************************************************
- 500usÑÓÊ±º¯Êý
- ¾§Õñ£º11.0592MHz
+ 500uså»¶æ—¶å‡½æ•°
+ æ™¶æŒ¯ï¼š11.0592MHz
 *********************************************************/
 void delay500(void)
 {
@@ -60,7 +60,7 @@ void writeComm(uchar comm)
     delayMs(1);
 }
 
-//Ð´Êý¾Ý:RS=1, RW=0;
+//å†™æ•°æ®:RS=1, RW=0;
 void writeData(uchar dat)
 {
      RS = 1;
@@ -208,7 +208,7 @@ int getTmpValue()
   \
     t = value * 0.0625;
     \
-    value = t * 100 + (value > 0 ? 0.5 : -0.5); //´óÓÚ0¼Ó0.5, Ð¡ÓÚ0¼õ0.5
+    value = t * 100 + (value > 0 ? 0.5 : -0.5); //å¤§äºŽ0åŠ 0.5, å°äºŽ0å‡0.5
     return value;
 }
 
@@ -249,7 +249,7 @@ void display(int v)
 void main()
 {
     uchar table[] = " xianzaiwendu:  ";
-	int i;//i´¢´æ×ª»»ºóµÄÎÂ¶ÈÖµ
+	int i;//iå‚¨å­˜è½¬æ¢åŽçš„æ¸©åº¦å€¼
 	uchar j;
     sendChangeCmd();
     init();
@@ -257,21 +257,21 @@ void main()
     writeString(table, 16);
     while(1)
     {
-        delayMs(1000); //ÎÂ¶È×ª»»Ê±¼äÐèÒª750msÒÔÉÏ
+        delayMs(1000); //æ¸©åº¦è½¬æ¢æ—¶é—´éœ€è¦750msä»¥ä¸Š
         writeComm(0xc0);
 		i = getTmpValue();
 		if(i > 2300)
 		{
 			for(j=200;j>0;j--)
 			{
-		 	 	BEEP=~BEEP;       //Êä³öÆµÂÊ1KHz
-		  		delay500();       //ÑÓÊ±500us
+		 	 	BEEP=~BEEP;       //è¾“å‡ºé¢‘çŽ‡1KHz
+		  		delay500();       //å»¶æ—¶500us
 			}
 	
 			for(j=200;j>0;j--)
 			{
-		 		 BEEP=~BEEP;       //Êä³öÆµÂÊ500Hz
-		 		 delay500();       //ÑÓÊ±1ms
+		 		 BEEP=~BEEP;       //è¾“å‡ºé¢‘çŽ‡500Hz
+		 		 delay500();       //å»¶æ—¶1ms
 		 		 delay500();
 			}	
 		}

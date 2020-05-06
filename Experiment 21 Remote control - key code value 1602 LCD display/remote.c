@@ -1,26 +1,26 @@
 /*********************************************************************************
-* ����дʱ�䡿�� 2014��3��5��
-* ����    �ߡ��� �������:03
-* ����    ������ 1.0
-* ����    վ���� http://www.qxmcu.com/ 
-* ���Ա����̡��� http://qxmcu.taobao.com/ (ֱ����)  http://qx-mcu.taobao.com/  ���ܵ꣩
-* ��ʵ��ƽ̨���� QX-MCS51 ��Ƭ��������
-* ���ⲿ���񡿣� 11.0592mhz	
-* ������оƬ���� STC89C52RC
-* �����뻷������ Keil ��Visio4	
-* �������ܡ��� Һ����ʾң�ظ������ļ���ֵ   �硰IR-CODE:8DH�����ü��ļ���Ϊ0x8D			   			            			    
-* ��ʹ��˵������ ʹ��Һ��ǰע��ȡ�������J6��ñ
+* 【编写时间】： 2014年3月5日
+* 【作    者】： 清翔电子:03
+* 【版    本】： 1.0
+* 【网    站】： http://www.qxmcu.com/ 
+* 【淘宝店铺】： http://qxmcu.taobao.com/ (直销店)  http://qx-mcu.taobao.com/  （总店）
+* 【实验平台】： QX-MCS51 单片机开发板
+* 【外部晶振】： 11.0592mhz	
+* 【主控芯片】： STC89C52RC
+* 【编译环境】： Keil μVisio4	
+* 【程序功能】： 液晶显示遥控各按键的键码值   如“IR-CODE:8DH”即该键的键码为0x8D			   			            			    
+* 【使用说明】： 使用液晶前注意取下数码管J6跳帽
 **********************************************************************************/
 
 
-/*Ԥ��������*/
-#include<reg52.h>    //������Ƭ���Ĵ�����ͷ�ļ�
-#include<intrins.h> //����_nop_()���������ͷ�ļ�
+/*预处理命令*/
+#include<reg52.h>    //包含单片机寄存器的头文件
+#include<intrins.h> //包含_nop_()函数定义的头文件
 #define uchar unsigned char
 #define uint  unsigned int
 #define delayNOP(); {_nop_();_nop_();_nop_();_nop_();};
 
-sbit IRIN=P3^2;         //���������������
+sbit IRIN=P3^2;         //红外接收器数据线
 sbit LCD_RS = P0^7;             
 sbit LCD_RW = P0^6;
 sbit LCD_EN = P0^5;
@@ -29,7 +29,7 @@ sbit LCD_EN = P0^5;
 uchar code  cdis1[ ] = {" Red Control "};
 uchar code  cdis2[ ] = {"  IR-CODE: --H  "};
 uchar IRCOM[7];
-/***************��ʱ����*****************************/
+/***************延时函数*****************************/
 void delay(unsigned char x)    //x*0.14MS
 {
 	unsigned char i;
@@ -55,8 +55,8 @@ void delay1(int ms)
 }
 /*******************************************************************/
 /*                                                                 */
-/*���LCDæ״̬                                                    */
-/*lcd_busyΪ1ʱ��æ���ȴ���lcd-busyΪ0ʱ,�У���дָ�������ݡ�      */
+/*检查LCD忙状态                                                    */
+/*lcd_busy为1时，忙，等待。lcd-busy为0时,闲，可写指令与数据。      */
 /*                                                                 */
 /*******************************************************************/ 
 
@@ -74,8 +74,8 @@ bit lcd_busy()
 
 /*******************************************************************/
 /*                                                                 */
-/*дָ�����ݵ�LCD                                                  */
-/*RS=L��RW=L��E=�����壬D0-D7=ָ���롣                             */
+/*写指令数据到LCD                                                  */
+/*RS=L，RW=L，E=高脉冲，D0-D7=指令码。                             */
 /*                                                                 */
 /*******************************************************************/
 
@@ -97,8 +97,8 @@ void lcd_wcmd(uchar cmd)
 
 /*******************************************************************/
 /*                                                                 */
-/*д��ʾ���ݵ�LCD                                                  */
-/*RS=H��RW=L��E=�����壬D0-D7=���ݡ�                               */
+/*写显示数据到LCD                                                  */
+/*RS=H，RW=L，E=高脉冲，D0-D7=数据。                               */
 /*                                                                 */
 /*******************************************************************/
 
@@ -117,64 +117,64 @@ void lcd_wdat(uchar dat)
 
 /*******************************************************************/
 /*                                                                 */
-/*  LCD��ʼ���趨                                                  */
+/*  LCD初始化设定                                                  */
 /*                                                                 */
 /*******************************************************************/
 
 void lcd_init()
 { 
 	delay1(15);                   
-	lcd_wcmd(0x38);      //16*2��ʾ��5*7����8λ����
+	lcd_wcmd(0x38);      //16*2显示，5*7点阵，8位数据
 	delay1(5);
 	lcd_wcmd(0x38);         
 	delay1(5);
 	lcd_wcmd(0x38);         
 	delay1(5);
 	
-	lcd_wcmd(0x0c);      //��ʾ�����ع��
+	lcd_wcmd(0x0c);      //显示开，关光标
 	delay1(5);
-	lcd_wcmd(0x06);      //�ƶ����
+	lcd_wcmd(0x06);      //移动光标
 	delay1(5);
-	lcd_wcmd(0x01);      //���LCD����ʾ����
+	lcd_wcmd(0x01);      //清除LCD的显示内容
 	delay1(5);
 }
 
 /*******************************************************************/
 /*                                                                 */
-/*  �趨��ʾλ��                                                   */
+/*  设定显示位置                                                   */
 /*                                                                 */
 /*******************************************************************/
 
 void lcd_pos(uchar pos)
 {                          
-	lcd_wcmd(pos | 0x80);  //����ָ��=80+��ַ����
+	lcd_wcmd(pos | 0x80);  //数据指针=80+地址变量
 }
 
 /*******************************************************************/
 void main()
 {
 	uchar m;	
-	IRIN=1;                    //I/O�ڳ�ʼ��
-	delay1(10);                 //��ʱ
-	lcd_init();                //��ʼ��LCD
-	lcd_pos(0);                //������ʾλ��Ϊ��һ�еĵ�1���ַ�	
+	IRIN=1;                    //I/O口初始化
+	delay1(10);                 //延时
+	lcd_init();                //初始化LCD
+	lcd_pos(0);                //设置显示位置为第一行的第1个字符	
 	m=0;
 	while(cdis1[m] != '\0')
-	{                         //��ʾ�ַ�
+	{                         //显示字符
 		lcd_wdat(cdis1[m]);
 		m++;
 	}
 	
-	lcd_pos(0x40);             //������ʾλ��Ϊ�ڶ��е�1���ַ�
+	lcd_pos(0x40);             //设置显示位置为第二行第1个字符
 	m=0;
 	while(cdis2[m] != '\0')
 	{
-		lcd_wdat(cdis2[m]);      //��ʾ�ַ�
+		lcd_wdat(cdis2[m]);      //显示字符
 		m++;
 	}
 		
-	IE=0x81;                 //�������ж��ж�,ʹ�� INT0 �ⲿ�ж�
-	TCON=0x01;               //������ʽΪ���帺���ش���
+	IE=0x81;                 //允许总中断中断,使能 INT0 外部中断
+	TCON=0x01;               //触发方式为脉冲负边沿触发
 	
 	while(1);
 
@@ -190,19 +190,19 @@ void IR_IN() interrupt 0 using 0
 		EX0 =1;
 		return;
 	} 
-	           //ȷ��IR�źų���
-	while (!IRIN)            //��IR��Ϊ�ߵ�ƽ������9ms��ǰ���͵�ƽ�źš�
+	           //确认IR信号出现
+	while (!IRIN)            //等IR变为高电平，跳过9ms的前导低电平信号。
 		delay(1);
 	
-	for (j=0;j<4;j++)         //�ռ���������
+	for (j=0;j<4;j++)         //收集四组数据
 	{ 
-		for (k=0;k<8;k++)        //ÿ��������8λ
+		for (k=0;k<8;k++)        //每组数据有8位
 		{
-			while (IRIN)            //�� IR ��Ϊ�͵�ƽ������4.5ms��ǰ���ߵ�ƽ�źš�
+			while (IRIN)            //等 IR 变为低电平，跳过4.5ms的前导高电平信号。
 			{delay(1);}
-			while (!IRIN)          //�� IR ��Ϊ�ߵ�ƽ
+			while (!IRIN)          //等 IR 变为高电平
 				delay(1);
-			while (IRIN)           //����IR�ߵ�ƽʱ��
+			while (IRIN)           //计算IR高电平时长
 			{
 				delay(1);
 				N++;           
@@ -210,12 +210,12 @@ void IR_IN() interrupt 0 using 0
 				{ 
 					EX0=1;
 					return;
-				}                  //0.14ms���������Զ��뿪��
-			}                        //�ߵ�ƽ�������                
-			IRCOM[j]=IRCOM[j] >> 1;     //�������λ����0��
+				}                  //0.14ms计数过长自动离开。
+			}                        //高电平计数完毕                
+			IRCOM[j]=IRCOM[j] >> 1;     //数据最高位补“0”
 			if(N>=8)
 			{
-				IRCOM[j] = IRCOM[j] | 0x80;		  //�������λ����1��
+				IRCOM[j] = IRCOM[j] | 0x80;		  //数据最高位补“1”
 			}  
 			N=0;
 		}
@@ -227,8 +227,8 @@ void IR_IN() interrupt 0 using 0
 		return; 
 	}
 	
-	IRCOM[5]=IRCOM[2] & 0x0F;     //ȡ����ĵ���λ
-	IRCOM[6]=IRCOM[2] >> 4;       //����4�Σ�����λ��Ϊ����λ
+	IRCOM[5]=IRCOM[2] & 0x0F;     //取键码的低四位
+	IRCOM[6]=IRCOM[2] >> 4;       //右移4次，高四位变为低四位
 	
 	if(IRCOM[5]>9)
 	{ 
@@ -245,9 +245,9 @@ void IR_IN() interrupt 0 using 0
 	IRCOM[6]=IRCOM[6]+0x30;
 	
 	lcd_pos(0x4b);             
-	lcd_wdat(IRCOM[6]);        //��һλ����ʾ 
+	lcd_wdat(IRCOM[6]);        //第一位数显示 
 	lcd_pos(0x4c);             
-	lcd_wdat(IRCOM[5]);        //�ڶ�λ����ʾ	
+	lcd_wdat(IRCOM[5]);        //第二位数显示	
 	EX0 = 1; 
 }
 

@@ -1,62 +1,62 @@
 /*********************************************************************************
-* ¡¾±àÐ´Ê±¼ä¡¿£º 2014Äê3ÔÂ5ÈÕ
-* ¡¾×÷    Õß¡¿£º ÇåÏèµç×Ó:03
-* ¡¾°æ    ±¾¡¿£º 1.0
-* ¡¾Íø    Õ¾¡¿£º http://www.qxmcu.com/ 
-* ¡¾ÌÔ±¦µêÆÌ¡¿£º http://qxmcu.taobao.com/ (Ö±Ïúµê)  http://qx-mcu.taobao.com/  £¨×Üµê£©
-* ¡¾ÊµÑéÆ½Ì¨¡¿£º QX-MCS51 µ¥Æ¬»ú¿ª·¢°å
-* ¡¾Íâ²¿¾§Õñ¡¿£º 11.0592mhz	
-* ¡¾Ö÷¿ØÐ¾Æ¬¡¿£º STC89C52RC
-* ¡¾±àÒë»·¾³¡¿£º Keil ¦ÌVisio4	
-* ¡¾³ÌÐò¹¦ÄÜ¡¿£º ´®¿ÚÖÐ¶Ï³ÌÐòÊµÑé¡ª¡ªÍ¨¹ýPCÉÏÎ»»úÈí¼þ¿ØÖÆÁ÷Ë®µÆÊµÑé			   			            			    
-				 ÒÔÏÂÎª16½øÖÆÐÎÊ½·¢ËÍ
-				 ·¢ËÍ 01 £¬ led1µÆÁÁ£»   
-				 ·¢ËÍ 02 £¬ led2µÆÁÁ£»
-				 ·¢ËÍ 03 £¬ ledµÆ3ÁÁ£»
-				 ·¢ËÍ 04 £¬ ledµÆ4ÁÁ£»
-				 ·¢ËÍ 05 £¬ ledµÆ5ÁÁ£»
-				 ·¢ËÍ 06 £¬ ledµÆ6ÁÁ£»
-				 ·¢ËÍ 07 £¬ ledµÆ7ÁÁ£»
-				 ·¢ËÍ 08 £¬ ledµÆ8ÁÁ£»			   			            			    
-* ¡¾Ê¹ÓÃËµÃ÷¡¿£º Ê¹ÓÃÇ°Çë¶Ì½ÓJ2ÌøÏßÃ±£¬´®¿ÚÖúÊÖÉèÖÃÎª±ÈÌØÂÊ9600£¬ÎÞÐ£ÑéÎ»£¬Í£Ö¹Î»1£¬
-·¢ËÍÊý¾ÝÎª16½øÖÆÐÎÊ½
+* ã€ç¼–å†™æ—¶é—´ã€‘ï¼š 2014å¹´3æœˆ5æ—¥
+* ã€ä½œ    è€…ã€‘ï¼š æ¸…ç¿”ç”µå­:03
+* ã€ç‰ˆ    æœ¬ã€‘ï¼š 1.0
+* ã€ç½‘    ç«™ã€‘ï¼š http://www.qxmcu.com/ 
+* ã€æ·˜å®åº—é“ºã€‘ï¼š http://qxmcu.taobao.com/ (ç›´é”€åº—)  http://qx-mcu.taobao.com/  ï¼ˆæ€»åº—ï¼‰
+* ã€å®žéªŒå¹³å°ã€‘ï¼š QX-MCS51 å•ç‰‡æœºå¼€å‘æ¿
+* ã€å¤–éƒ¨æ™¶æŒ¯ã€‘ï¼š 11.0592mhz	
+* ã€ä¸»æŽ§èŠ¯ç‰‡ã€‘ï¼š STC89C52RC
+* ã€ç¼–è¯‘çŽ¯å¢ƒã€‘ï¼š Keil Î¼Visio4	
+* ã€ç¨‹åºåŠŸèƒ½ã€‘ï¼š ä¸²å£ä¸­æ–­ç¨‹åºå®žéªŒâ€”â€”é€šè¿‡PCä¸Šä½æœºè½¯ä»¶æŽ§åˆ¶æµæ°´ç¯å®žéªŒ			   			            			    
+				 ä»¥ä¸‹ä¸º16è¿›åˆ¶å½¢å¼å‘é€
+				 å‘é€ 01 ï¼Œ led1ç¯äº®ï¼›   
+				 å‘é€ 02 ï¼Œ led2ç¯äº®ï¼›
+				 å‘é€ 03 ï¼Œ ledç¯3äº®ï¼›
+				 å‘é€ 04 ï¼Œ ledç¯4äº®ï¼›
+				 å‘é€ 05 ï¼Œ ledç¯5äº®ï¼›
+				 å‘é€ 06 ï¼Œ ledç¯6äº®ï¼›
+				 å‘é€ 07 ï¼Œ ledç¯7äº®ï¼›
+				 å‘é€ 08 ï¼Œ ledç¯8äº®ï¼›			   			            			    
+* ã€ä½¿ç”¨è¯´æ˜Žã€‘ï¼š ä½¿ç”¨å‰è¯·çŸ­æŽ¥J2è·³çº¿å¸½ï¼Œä¸²å£åŠ©æ‰‹è®¾ç½®ä¸ºæ¯”ç‰¹çŽ‡9600ï¼Œæ— æ ¡éªŒä½ï¼Œåœæ­¢ä½1ï¼Œ
+å‘é€æ•°æ®ä¸º16è¿›åˆ¶å½¢å¼
 **********************************************************************************/
 
-/*Ô¤´¦ÀíÃüÁî*/
-#include <reg52.h> 		  //°üº¬µ¥Æ¬»ú¼Ä´æÆ÷µÄÍ·ÎÄ¼þ
+/*é¢„å¤„ç†å‘½ä»¤*/
+#include <reg52.h> 		  //åŒ…å«å•ç‰‡æœºå¯„å­˜å™¨çš„å¤´æ–‡ä»¶
 #define uchar unsigned char
 #define uint unsigned int
 #define LED P1
 uchar dat,num;
 void main()
 {	
-	TMOD=0x20;		   //ÓÃ¶¨Ê±Æ÷ÉèÖÃ´®¿Ú²¨ÌØÂÊ
+	TMOD=0x20;		   //ç”¨å®šæ—¶å™¨è®¾ç½®ä¸²å£æ³¢ç‰¹çŽ‡
 	TH1=0xfd;
 	TL1=0xfd;
 	TR1=1;
-	REN=1;          //´®¿Ú³õÊ¼»¯
+	REN=1;          //ä¸²å£åˆå§‹åŒ–
 	SM0=0;
 	SM1=1;
-	EA=1;           //¿ªÆô×ÜÖÐ¶Ï
-	ES=1;			//¿ªÆô´®¿ÚÖÐ¶Ï
+	EA=1;           //å¼€å¯æ€»ä¸­æ–­
+	ES=1;			//å¼€å¯ä¸²å£ä¸­æ–­
 	while(1)
 	{	
 		if(num==1)
 		{
-			switch(dat)    //ÅÐ¶Ï´®¿Ú½ÓÊÕµÄÊý¾Ý
+			switch(dat)    //åˆ¤æ–­ä¸²å£æŽ¥æ”¶çš„æ•°æ®
 			{
-				case 1:LED=0xfe;break; //µãÁÁµÚ1¸öµÆ
-				case 2:LED=0xfd;break;  //µãÁÁµÚ2¸öµÆ
-				case 3:LED=0xfb;break;  //µãÁÁµÚ3¸öµÆ
-				case 4:LED=0xf7;break;  //µãÁÁµÚ4¸öµÆ
-				case 5:LED=0xef;break;  //µãÁÁµÚ5¸öµÆ
-				case 6:LED=0xdf;break;  //µãÁÁµÚ6¸öµÆ
-				case 7:LED=0xbf;break;  //µãÁÁµÚ7¸öµÆ
-				case 8:LED=0x7f;break;  //µãÁÁµÚ8¸öµÆ
-				case 0:LED=0xff;break;  //Çå¿ÕËùÓÐµÄµÆ
+				case 1:LED=0xfe;break; //ç‚¹äº®ç¬¬1ä¸ªç¯
+				case 2:LED=0xfd;break;  //ç‚¹äº®ç¬¬2ä¸ªç¯
+				case 3:LED=0xfb;break;  //ç‚¹äº®ç¬¬3ä¸ªç¯
+				case 4:LED=0xf7;break;  //ç‚¹äº®ç¬¬4ä¸ªç¯
+				case 5:LED=0xef;break;  //ç‚¹äº®ç¬¬5ä¸ªç¯
+				case 6:LED=0xdf;break;  //ç‚¹äº®ç¬¬6ä¸ªç¯
+				case 7:LED=0xbf;break;  //ç‚¹äº®ç¬¬7ä¸ªç¯
+				case 8:LED=0x7f;break;  //ç‚¹äº®ç¬¬8ä¸ªç¯
+				case 0:LED=0xff;break;  //æ¸…ç©ºæ‰€æœ‰çš„ç¯
 			//	default :break; 
 			}
-			ES=1;		 //´ò¿ª´®¿ÚÖÐ¶Ï	
+			ES=1;		 //æ‰“å¼€ä¸²å£ä¸­æ–­	
 			num=0;
 		}
 		
@@ -65,7 +65,7 @@ void main()
 void ser() interrupt 4
 {
 	RI=0;
-	dat=SBUF;				//½ÓÊÕÊý¾ÝSBUF£¬¼´½«¼ÆËã»úµÄÊý¾Ý½ÓÊÕ¡£
-	ES=0;				    //¹Ø±Õ´®¿ÚÖÐ¶Ï
+	dat=SBUF;				//æŽ¥æ”¶æ•°æ®SBUFï¼Œå³å°†è®¡ç®—æœºçš„æ•°æ®æŽ¥æ”¶ã€‚
+	ES=0;				    //å…³é—­ä¸²å£ä¸­æ–­
 	num=1;
 }
