@@ -1,0 +1,70 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Nixie tube static display-0123
+* [Instructions for use]: Jumper cap shorted to digital tube jumper J6
+************************************************** ******************************** /
+
+#include <reg52.h>
+#define uchar unsigned char
+sbit P2_0 = P2 ^ 0;
+sbit P2_1 = P2 ^ 1;
+sbit P2_2 = P2 ^ 2;
+sbit P2_3 = P2 ^ 3;
+
+uchar code table [] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,
+                        0xf8,0x80,0x90};
+void delay (uchar i)
+{
+  uchar j, k;
+  for (j = i; j> 0; j--)
+    for (k = 125; k> 0; k--);
+}
+
+void display ()
+{
+  
+   P0 = table [0];
+   P2_0 = 0;
+   delay (5);
+   P2_0 = 1;
+
+   P0 = table [1];
+   P2_1 = 0;
+   delay (5);
+   P2_1 = 1;
+
+   P0 = table [2];
+   P2_2 = 0;
+   delay (5);
+   P2_2 = 1;
+
+    P0 = table [3];
+   P2_3 = 0;
+   delay (5);
+   P2_3 = 1;
+   
+}
+
+/ * Demo main program * /
+void main (void)
+{
+    unsigned int a;
+   
+ while (1)
+ {
+ 
+   for (a = 100; a> 0; a--)
+   {
+     display ();
+   }
+ 
+ }
+}

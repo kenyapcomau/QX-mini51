@@ -1,0 +1,239 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: The serial port prints the return value of the temperature and humidity sensor DHT11
+* [Instructions]: 1. The temperature and humidity sensor DHT11 shares the socket with the temperature probe, the third pin of DHT11 is floating
+                                 The side with the words faces the development board
+                           2. Serial port baud rate 9600
+************************************************** ******************************** /
+
+#include <reg51.h>
+#include <intrins.h>
+//
+typedef unsigned char U8; / * defined for unsigned 8-bits integer variable unsigned 8-bits integer variable * /
+typedef signed char S8; / * defined for signed 8-bits integer variable signed 8-bits integer variable * /
+typedef unsigned int U16; / * defined for unsigned 16-bits integer variable unsigned 16-bits integer variable * /
+typedef signed int S16; / * defined for signed 16-bits integer variable signed 16-bits integer variable * /
+typedef unsigned long U32; / * defined for unsigned 32-bits integer variable unsigned 32-bits integer variable * /
+typedef signed long S32; / * defined for signed 32-bits integer variable signed 32-bits integer variable * /
+typedef float F32; / * single precision floating point variable (32bits) single precision floating point variable (32 bit length) * /
+typedef double F64; / * double precision floating point variable (64bits) double precision floating point variable (64 bit length) * /
+//
+#define uchar unsigned char
+#define uint unsigned int
+#define Data_0_time 4
+// --------------- -------------------- //
+// ---------------- IO port definition area -------------------- //
+// -------------- -------------------------- //
+sbit P2_0 = P3 ^ 7; // DATA
+sbit P2_1 = P2 ^ 1;
+sbit P2_2 = P2 ^ 2;
+sbit P2_3 = P2 ^ 3;
+// --------- ------------------------------------ //
+// ---------------- definition area -------------------- //
+// --------------------- ----------------------- //
+U8 U8FLAG, k;
+U8 U8count, U8temp;
+U8 U8T_data_H, U8T_data_L, U8RH_data_H, U8RH_data_L, U8checkdata;
+U8 U8T_data_H_temp, U8T_data_L_temp, U8RH_data_H_temp, U8RH_data_L_temp, U8checkdata_temp;
+U8 U8comdata;
+U8 outdata [5]; // Define the number of bytes sent
+U8 indata [5];
+U8 count, count_r = 0;
+U8 str [5] = {"RS232"};
+U16 U16temp1, U16temp2;
+
+SendData (U8 * a)
+{
+        outdata [0] = a [0];
+        outdata [1] = a [1];
+        outdata [2] = a [2];
+        outdata [3] = a [3];
+        outdata [4] = a [4];
+        count = 1;
+        SBUF = outdata [0];
+}
+
+void Delay (U16 j)
+{
+        U8 i;
+        for (; j> 0; j--)
+        {
+        for (i = 0; i <27; i ++);
+        }
+}
+
+void Delay_10us (void)
+{
+        U8 i;
+        i--;
+        i--;
+        i--;
+        i--;
+        i--;
+        i--;
+}
+
+void COM (void)
+{
+        U8 i;
+        for (i = 0; i <8; i ++)
+        {
+                U8FLAG = 2;
+                // ----------------------
+                P2_1 = 0; // T
+                P2_1 = 1; // T
+                // ----------------------
+                while ((! P2_0) && U8FLAG ++);
+                Delay_10us ();
+                Delay_10us ();
+                // Delay_10us ();
+                U8temp = 0;
+                if (P2_0) U8temp = 1;
+                U8FLAG = 2;
+                while ((P2_0) && U8FLAG ++);
+                // ----------------------
+                P2_1 = 0; // T
+                P2_1 = 1; // T
+                // ----------------------
+                // The timeout will jump out of the for loop
+                if (U8FLAG == 1) break;
+                // Determine whether the data bit is 0 or 1
+                // If the high level is higher than the predetermined 0 high level value, the data bit is 1
+                U8comdata << = 1;
+                U8comdata | = U8temp; // 0
+        } // rof
+}
+// ------------ --------------------
+// ----- Humidity reading subroutine ------------
+// ---------------------- ----------
+// ---- The following variables are global variables --------
+// ---- 8-bit high temperature == U8T_data_H ------
+// ---- lower 8 bits of temperature == U8T_data_L ------
+// ---- high humidity 8 bits == U8RH_data_H -----
+// ---- 8 bits lower humidity == U8RH_data_L -----
+// ---- Check 8 bits == U8checkdata -----
+// ---- Call related subroutines as follows ----------
+// ---- Delay () ;, Delay_10us (); COM ();
+// --------------------- -----------
+void RH (void)
+{
+        // The host pulled down 18ms
+        P2_0 = 0;
+        Delay (180);
+        P2_0 = 1;
+        // The bus is pulled high by the pull-up resistor. The host delays 20us
+        Delay_10us ();
+        Delay_10us ();
+        Delay_10us ();
+        Delay_10us ();
+        // The master is set as input to judge the response signal of the slave
+        P2_0 = 1;
+        // Determine whether the slave has a low-level response signal. If it does not respond, it will jump out, and the response will run down.
+        if (! P2_0) // T!
+        {
+        U8FLAG = 2;
+        // Determine whether the slave sends out a low level response signal of 80us or not
+        while ((! P2_0) && U8FLAG ++);
+        U8FLAG = 2;
+        // Determine whether the slave sends a high level of 80us, if it sends out, it will enter the data receiving state
+        while ((P2_0) && U8FLAG ++);
+        // Data receiving status
+        COM ();
+        U8RH_data_H_temp = U8comdata;
+        COM ();
+        U8RH_data_L_temp = U8comdata;
+        COM ();
+        U8T_data_H_temp = U8comdata;
+        COM ();
+        U8T_data_L_temp = U8comdata;
+        COM ();
+        U8checkdata_temp = U8comdata;
+        P2_0 = 1;
+        //Data validation
+        U8temp = (U8T_data_H_temp + U8T_data_L_temp + U8RH_data_H_temp + U8RH_data_L_temp);
+        if (U8temp == U8checkdata_temp)
+        {
+                U8RH_data_H = U8RH_data_H_temp;
+                U8RH_data_L = U8RH_data_L_temp;
+                U8T_data_H = U8T_data_H_temp;
+                U8T_data_L = U8T_data_L_temp;
+                U8checkdata = U8checkdata_temp;
+        } // fi
+        } // fi
+}
+// ---------------------------------------
+// main () function description: AT89C51 11.0592MHz serial port
+// Send temperature and humidity data, baud rate 9600
+// ----------------------------------------------
+void main ()
+{
+        U8 i, j;
+        // uchar str [6] = {"RS232"};
+        /* system initialization */
+        TMOD = 0x20; // Timer T1 uses working mode 2
+        TH1 = 253; // Set the initial value
+        TL1 = 253;
+        TR1 = 1; // Start timing
+        SCON = 0x50; // Working mode 1, baud rate 9600bps, allow receiving
+        ES = 1;
+        EA = 1; // open all interrupts
+        TI = 0;
+        RI = 0;
+        SendData (str); // Send to serial port
+        Delay (1); // Delay 100US (12M crystal)
+        while (1)
+        {
+                // ------------------------
+                // Call temperature and humidity reading subroutine
+                RH ();
+                // Serial port display program
+                // --------------------------
+                str [0] = U8RH_data_H;
+                str [1] = U8RH_data_L;
+                str [2] = U8T_data_H;
+                str [3] = U8T_data_L;
+                str [4] = U8checkdata;
+                SendData (str); // Send to serial port
+                // The data cycle of reading module is not easy to be less than 2S
+                Delay (20000);
+        } // elihw
+} // main
+void RSINTR () interrupt 4 using 2
+{
+        U8 InPut3;
+        if (TI == 1) // Transmit interrupt
+        {
+                TI = 0;
+                if (count! = 5) // After sending 5 data
+                {
+                        SBUF = outdata [count];
+                        count ++;
+                }
+        }
+        if (RI == 1) // Receive interrupt
+        {
+                InPut3 = SBUF;
+                indata [count_r] = InPut3;
+                count_r ++;
+                RI = 0;
+                if (count_r == 5) // After receiving 4 data
+                {
+                        // The data is received and processed.
+                        count_r = 0;
+                        str [0] = indata [0];
+                        str [1] = indata [1];
+                        str [2] = indata [2];
+                        str [3] = indata [3];
+                        str [4] = indata [4];
+                        P0 = 0;
+                }
+        }
+}

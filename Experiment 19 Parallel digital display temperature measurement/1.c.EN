@@ -1,0 +1,200 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Digital tube displays temperature
+* [Instructions]: Note: When connecting the 18B20 temperature sensor, the semicircle faces the development board, and the plane faces the development board
+                                 Can not be inserted reversely, the heat will rise sharply when the surface of 18B20 is inserted reversely, at this time, 18B20 should be removed immediately
+                                 Jumper cap to short connect J6 jumper
+************************************************** ******************************** /
+
+#include <reg51.h> // DS18B20 temperature sensor program
+code unsigned char seg7code [] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,
+                               0x82,0xf8,0x80,0x90,0xff}; // Common Yang digital tube segment code without decimal point
+code unsigned char seg7codeB [] = {0x40,0x79,0x24,0x30,0x19,0x12,
+                               0x02,0x78,0x00,0x10,0xff}; // Common Yang digital tube segment code with decimal point
+
+sbit DQ = P3 ^ 7; // The data transmission line is connected to the corresponding pin of the microcontroller
+unsigned char tempL = 0; // Set global variables
+unsigned char tempH = 0;
+unsigned int sdata; // The integer part of the measured temperature
+unsigned char xiaoshu1; // The first decimal place
+unsigned char xiaoshu2; // The second decimal place
+unsigned char xiaoshu; // Two decimal places
+bit fg = 1; // temperature positive and negative signs
+
+
+
+// ****************** Delay subroutine ************************** *****
+
+// The specific delay time of this delay program is time = i * 8 + 10, suitable for delays less than 2ms
+
+// **************************************************** ************
+void delay (unsigned char i)
+{
+ for (i; i> 0; i--);
+}
+
+
+// **************************************************** ***********
+
+// Delay subroutine
+
+// **************************************************** ************
+void delay1ms ()
+{
+ unsigned char i;
+ for (i = 124; i> 0; i--); // Delay 124 * 8 + 10 = 1002us
+}
+
+
+
+// ***************************** Initialization procedure ***************** **************** //
+
+void Init_DS18B20 (void)
+{
+ unsigned char x = 0;
+ DQ = 1; // DQ is set high first
+ delay (8); // Slightly delayed
+ DQ = 0; // Send reset pulse
+ delay (80); // Delay (> 480us)
+ DQ = 1; // Pull up the data line
+ delay (5); // wait (15 ~ 60us)
+ x = DQ; // Use the value of X to judge whether the initialization is successful, if 18B20 exists, X = 0, otherwise X = 1
+ delay (20);
+}
+
+
+// ********** Read a byte ************ //
+
+ReadOneChar (void) // The host data line is pulled from high to low level for more than 1us, and then the data line is raised to high level to generate a read signal
+{
+unsigned char i = 0; // The shortest duration of each read cycle is 60us, and there must be a high recovery period of more than 1us between each read cycle
+unsigned char dat = 0;
+for (i = 8; i> 0; i--) // A byte has 8 bits
+{
+ DQ = 1;
+ delay (1);
+ DQ = 0;
+ dat >> = 1;
+ DQ = 1;
+ if (DQ)
+ dat | = 0x80;
+ delay (4);
+}
+return (dat);
+}
+
+
+
+// *********************** ** Write a byte ******************* ******* //
+
+void WriteOneChar (unsigned char dat)
+{
+  unsigned char i = 0; // The data line is pulled from high level to low level to generate a write start signal. Send the bit to be written to the data line within 15us,
+  for (i = 8; i> 0; i--) // Sample the data line between 15 ~ 60us, write 1 if it is high, and write 0 when low
+  {
+   DQ = 0; // There must be a high level recovery period of more than 1us before starting another write cycle.
+   DQ = dat & 0x01;
+   delay (5);
+   DQ = 1;
+   dat >> = 1;
+  }
+  delay (4);
+}
+
+
+// Read the temperature value (low tempL; high tempH;)
+void ReadTemperature (void)
+{
+ Init_DS18B20 (); // Initialize
+ WriteOneChar (0xcc); // Skip the operation of reading serial number
+ WriteOneChar (0x44); // Start temperature conversion
+ delay (125); // The conversion takes a little time, delay
+ Init_DS18B20 (); // Initialize
+ WriteOneChar (0xcc); // Skip the operation of reading serial number
+ WriteOneChar (0xbe); // Read the temperature register (the first two values ​​are the low and high bits of temperature)
+ tempL = ReadOneChar (); // Read the low LSB of the temperature
+ tempH = ReadOneChar (); // The high MSB of the read temperature
+  
+                if (tempH> 0x7f) // The temperature is negative when the highest bit is 1
+                {
+                 tempL = ~ tempL; // complement code conversion, inverse plus one
+                 tempH = ~ tempH + 1;
+                 fg = 0; // fg = 0 when reading temperature is negative
+       }
+                sdata = tempL / 16 + tempH * 16; // integer part
+                xiaoshu1 = (tempL & 0x0f) * 10/16; // first decimal place
+                xiaoshu2 = (tempL & 0x0f) * 100/16% 10; // The second decimal place
+                xiaoshu = xiaoshu1 * 10 + xiaoshu2; // Two decimal places
+}
+
+
+// ******************** Display function ******************
+void Led (unsigned int date)
+{
+ if (fg == 1)
+ {
+         P2 = 0xfe; //P1.0=0, strobe first
+         P0 = seg7code [date / 10]; // Ten digits, lookup table, output
+         delay1ms ();
+         P0 = 0xff; // Blank
+
+         P2 = 0xfd; //P1.1=0, strobe second, single digit
+         P0 = seg7codeB [date% 10];
+         delay1ms ();
+         P0 = 0xff; // Blank
+
+         P2 = 0xfb; //P1.3=0, strobe third place, decimal place first
+         P0 = seg7code [xiaoshu1];
+         delay1ms ();
+         P0 = 0xff; // Blank
+
+         P2 = 0xf7; //P1.3=0, strobe fourth place, second decimal place
+         P0 = seg7code [xiaoshu2];
+         delay1ms ();
+         P0 = 0xff; // Blank
+ }
+
+   if (fg == 0) // Data displayed when the temperature is negative
+   {
+         P2 = 0xfe; //P1.0=0, strobe first
+         P0 = seg7code [11]; // Display negative sign
+         delay1ms ();
+         P0 = 0xff; // Blank
+
+         P2 = 0xfd; //P1.1=0, strobe second place, tens place
+         P0 = seg7code [date / 10];
+         delay1ms ();
+         P0 = 0xff; // Blank
+
+         P2 = 0xfb; //P1.3=0, strobe third, single digit
+         P0 = seg7codeB [date% 10];
+         delay1ms ();
+         P0 = 0xff; // Blank
+
+         P2 = 0xf7; //P1.3=0, strobe fourth place, decimal place first
+         P0 = seg7code [xiaoshu1];
+         delay1ms ();
+         P0 = 0xff; // Blank
+   }
+}
+
+
+// **************************** // Main program
+
+
+main ()
+{
+ while (1)
+ {
+  ReadTemperature ();
+  Led (sdata);
+ }
+}

@@ -1,0 +1,278 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: 1602 LCD display
+* [Instructions]: 1. Unplug the J6 jumper of the digital tube before using the 1602 LCD. The digital tube and LCD cannot be shared
+                 2. Connect the 1602 LCD to the L2 row mother, the LCD faces the outside of the development board
+                                 3. If the 1602 LCD is not displayed after the programming is completed, please adjust the potentiometer RV1 at the bottom right of the development board
+                                 S1 selects to adjust hours, minutes and seconds, S2 increases, S3 decreases, and S4 confirms.
+************************************************** ******************************** /
+
+#include <reg52.h>
+#define uchar unsigned char
+#define uint unsigned int
+sbit lcdrs = P0 ^ 7; // LCD pin definition
+sbit led_cs = P0 ^ 6;
+sbit lcden = P0 ^ 5;
+
+sbit key1 = P3 ^ 5;
+sbit key2 = P3 ^ 4;
+sbit key3 = P3 ^ 3;
+sbit keyE = P3 ^ 2;
+uchar num, key1num, count, hour, min, sec;
+uchar code cg_1602 [] = {0x08,0x0f, 0x12,0x0f, 0x0a, 0x1f, 0x02,0x02,
+0x0f, 0x09,0x0f, 0x09,0x0f, 0x09,0x11,0x00,
+0x0f, 0x09,0x09,0x0f, 0x09,0x09,0x0f, 0x00}; // "Year Month Day"
+/ * Delay function * /
+void delay (uint xms)
+{
+        uint i, j;
+        for (i = xms; i> 0; i--)
+        for (j = 114; j> 0; j--);
+}
+/ * 1602 LCD * /
+void write_com (uchar com) // Write command
+{
+        lcdrs = 0;
+        lcden = 0;
+        P2 = com;
+        delay (5);
+        lcden = 1;
+        delay (5);
+        lcden = 0;
+}
+void write_data (uchar date) // Write data
+{
+        lcdrs = 1;
+        lcden = 0;
+        P2 = date;
+        delay (5);
+        lcden = 1;
+        delay (5);
+        lcden = 0;
+}
+void write_by_xy (uchar x, uchar y) // Coordinate positioning
+{
+        uchar address;
+        if (y == 0)
+        address = 0x80 + x; // y = 0, write the first line
+        else
+        address = 0xc0 + x; // y = 1, write the second line
+        write_com (address);
+}
+/ * void write_char (uchar x, uchar y, uchar date) // Coordinate positioning display
+{
+        write_by_xy (x, y); // First locate
+        write_data (date); // write number after
+} * /
+void write_string (uchar x, uchar y, uchar * s) // write string (this pointer is not well understood)
+{
+        write_by_xy (x, y); // Set the display position
+        while (* s) // write character
+        {
+        P2 = * s;
+        write_data (* s);
+        s ++;
+        }
+}
+void write_sfm (uchar add, uchar date) // Write hour, minute and second function
+{
+        uchar hour, ge;
+        hour = date / 10; // Decompose a two-digit tens and ones
+        ge = date% 10;
+        write_com (0x80 + 0x40 + add); // Set the display position
+        write_data (0x30 + hour); // Send LCD display ten digits
+        write_data (0x30 + ge); // Send to LCD display unit
+}
+void write_cg () // Write fixed Chinese characters and symbols
+{
+        write_com (0x40); // Set CGRAM address
+        for (num = 0; num <24; num ++) // Write custom font code to CGRAM
+        {
+                write_data (cg_1602 [num]);
+        }
+        write_com (0x84); // year
+        {
+                write_data (0);
+        }
+        write_com (0x87); // Month
+        {
+                write_data (1);
+        }
+        write_com (0x8a); // day
+        {
+                write_data (2);
+        }
+        write_string (2,1, ":");
+        write_string (5,1, ":");
+        write_string (9,1, "QX-MCU");
+}
+void init_1602 () // Initialization
+{
+        led_cs = 0;
+        hour = 22; min = 33; sec = 55; key1num = 0; count = 0;
+        write_com (0x38);
+        write_com (0x0c);
+        write_com (0x06);
+        write_com (0x01);
+        write_string (0,0, "2014");
+        write_string (5,0, "07");
+        write_string (8,0, "12");
+        write_sfm (0, hour);
+        write_sfm (3, min);
+        write_sfm (6, sec);
+        write_cg ();
+        TMOD = 0x01; // Set timer 0 working mode 1
+        TH0 = (65536-50000) / 256; // The timer is set to the initial value
+        TL0 = (65536-50000)% 256;
+        EA = 1; // Open total interrupt
+        ET0 = 1; // Open timer 0 interrupt
+        TR0 = 1; // Start timer 0
+}
+/ * Keyboard scan function * /
+void keyscan () // Key scan function
+{
+        keyE = 0;
+        if (key1 == 0)
+        {
+                delay (5);
+                if (key1 == 0) // Confirm that the function key is pressed
+                {
+                        key1num ++; // Record the number of function key presses
+                        while (! key1); // Release confirmation
+                        if (key1num == 1) // When it is pressed for the first time
+                        {
+                                TR0 = 0; // Turn off the timer
+                                write_com (0x80 + 0x40 + 7); // The cursor is positioned to the second position
+                                write_com (0x0f); // The cursor starts to blink
+                        }
+                        if (key1num == 2) // Press the cursor to flash to the second position
+                        {
+                                write_com (0x80 + 0x40 + 4);
+                        }
+                        if (key1num == 3) // Press the cursor for the third time to flash to locate the hour position
+                        {
+                                write_com (0x80 + 0x40 + 1);
+                        }
+                        if (key1num == 4) // The fourth press
+                        {
+                                key1num = 0; // The record key number is cleared
+                                write_com (0x0c); // Cancel the cursor blink
+                                TR0 = 1; // Start the timer to start the clock
+                        }
+                }
+        }
+        if (key1num! = 0) // The increase and decrease keys are only valid after the function key is pressed
+        {
+                if (key2 == 0)
+                {
+                        delay (5);
+                        if (key2 == 0) // Add key to confirm that it is pressed
+                        {
+                                while (! key2); // Key release
+                                if (key1num == 1) // If the function key is pressed for the first time
+                                {
+                                        sec ++; // adjust the seconds plus 1
+                                        if (sec == 60) // If it is over 60, it will be cleared
+                                        sec = 0;
+                                        write_sfm (6, sec); // Send LCD display once every adjustment
+                                        write_com (0x80 + 0x40 + 7); // The display position returns to the adjustment position again
+                                }
+                                if (key1num == 2) // If the function key is pressed for the second time
+                                {
+                                        min ++; // The adjustment minute is increased by 1
+                                        if (min == 60) // If it is over 60, it will be cleared
+                                        min = 0;
+                                        write_sfm (3, min); // Send LCD display every time it is adjusted
+                                        write_com (0x80 + 0x40 + 4); // The display position returns to the adjustment position again
+                                }
+                                if (key1num == 3) // If the function key is pressed for the third time
+                                {
+                                        hour ++; // The adjustment hour plus 1
+                                        if (hour == 24) // If it is over 24, it will be cleared
+                                        hour = 0;
+                                        write_sfm (0, hour) ;; // Send LCD display once every adjustment
+                                        write_com (0x80 + 0x40 + 1); // The display position returns to the adjustment position again
+                                }
+                        }
+                }
+                if (key3 == 0)
+                {
+                        delay (5);
+                        if (key3 == 0) // Confirm that the decrease key is pressed
+                        {
+                                while (! key3); // Key release
+                                if (key1num == 1) // If the function key is pressed for the first time
+                                {
+                                        sec--; // adjust the seconds minus 1
+                                        if (sec ==-1) // If it decreases to a negative number, reset it to 59
+                                                sec = 59;
+                                        write_sfm (6, sec); // Send LCD display once every adjustment
+                                        write_com (0x80 + 0x40 + 7); // The display position returns to the adjustment position again
+                                }
+                                if (key1num == 2) // If the function key is pressed for the second time
+                                {
+                                        min-; // The adjustment minus 1
+                                        if (min ==-1) // If it decreases to a negative number, reset it to 59
+                                                min = 59;
+                                        write_sfm (3, min); // Send LCD display every time it is adjusted
+                                write_com (0x80 + 0x40 + 4); // The display position returns to the adjustment position again
+                                }
+                                if (key1num == 3) // If the function key is pressed for the second time
+                                {
+                                        hour-; // The adjustment hour minus 1
+                                        if (hour ==-1) // If it decreases to a negative number, reset it to 23
+                                                hour = 23;
+                                        write_sfm (0, hour); // Send LCD display every time it is adjusted
+                                        write_com (0x80 + 0x40 + 1); // The display position returns to the adjustment position again
+                                }
+                        }
+                }
+        }
+}
+/ * Main function * /
+void main ()
+{
+        led_cs = 0;
+        init_1602 ();
+        while (1)
+        {
+                keyscan ();
+        }
+}
+/ * Interrupt function * /
+void timer0 () interrupt 1 // Timer 0 interrupt service routine
+{
+        TH0 = (65536-50000) / 256; // Reload the initial value of the timer
+        TL0 = (65536-50000)% 256;
+        count ++; // Cumulative number of interrupts
+        if (count == 20) // 20 times 50 milliseconds is 1 second
+        {
+                count = 0;
+                sec ++;
+                if (sec == 60) // seconds to 60 then carry minutes
+                {
+                        sec = 0; // At the same time, the number of seconds is cleared
+                        min ++;
+                        if (min == 60) // minute is added to 60 to carry hour
+                        {
+                                min = 0; // At the same time, the number of minutes is cleared
+                                hour ++;
+                                if (hour == 24) // If the hour is added to 24, the hour will be cleared
+                                {
+                                        hour = 0;
+                                }
+                                write_sfm (0, hour); // If the hour changes, rewrite
+                        }
+                        write_sfm (3, min); // If the minute changes, rewrite
+                }
+                write_sfm (6, sec); // If the second changes, rewrite
+        }
+}

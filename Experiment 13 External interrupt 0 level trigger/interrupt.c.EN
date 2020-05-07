@@ -1,0 +1,42 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: External interrupt control LED light
+* [Instructions]: Please short the J2 jumper cap before use
+                                 External interrupt 0 level trigger-use an independent key to trigger the interrupt
+                                 Test through the independent button S4 connected to the interrupt interface P3.2, press the LED light once to reverse, here use level trigger,
+                 The effect of not releasing the button is different from that of releasing the button. When you press it, you will see all the lights on, indicating that the interrupt has been working.
+                                 P3.2 is an IO port that can be reused, one is a common IO port, and the other is an external interrupt 0 external interface. That is what this section describes.
+                 Through this program, you can easily write other interrupt methods
+************************************************** ******************************** /
+
+#include <reg52.h> // Include the definition of special function register
+#define LED P1 // Macro definition LED represents P1
+/ ************************************************* *******
+                    Main program
+************************************************** ******* /
+main ()
+{
+        LED = 0xff; // The initial value of P1 port, turn off the led light
+        EA = 1; // disconnect globally
+        EX0 = 1; // External interrupt 0 is on
+        IT0 = 0; // level trigger
+        while (1)
+        {
+                // Add other programs here, the interrupt program can be executed synchronously with the program here
+        }
+}
+/ ************************************************* ***
+                 External interrupt routine
+************************************************** *** /
+void Key_INT (void) interrupt 0 using 1
+{
+        LED = ~ LED;
+}

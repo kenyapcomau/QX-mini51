@@ -1,0 +1,197 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Digital tube displays infrared key code value 0-9
+* [Instructions]: When using infrared receiver, the infrared receiver should be inserted to the designated position of the development board, pay attention to the direction
+                                 There are arc tips on the development board, and the arc surface of the infrared receiver head faces the outside of the development board
+************************************************** ******************************** /
+
+/ * Preprocessing commands * /
+#include <reg52.h> // Include header file of microcontroller register
+#include <intrins.h> // Include the header file defined by _nop_ () function
+#define uchar unsigned char
+#define uint unsigned int
+#define delayNOP (); {_nop _ (); _ nop _ (); _ nop _ (); _ nop_ ();};
+
+sbit IRIN = P3 ^ 2; // Infrared receiver data line
+
+
+sbit P2_0 = P2 ^ 0;
+sbit P2_1 = P2 ^ 1;
+sbit P2_2 = P2 ^ 2;
+sbit P2_3 = P2 ^ 3;
+
+uchar code table [] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,
+                        0xf8,0x80,0x90};
+uchar IRCOM [7];
+uchar m;
+
+
+void delay1ms ();
+void delay (unsigned char x);
+void display ();
+void delay1 (int ms);
+
+
+
+/ ************************************************* ****************** /
+void main ()
+{
+         unsigned int a;
+   
+        IRIN = 1; // I / O port initialization
+        IE = 0x81; // Allow total interrupts and enable INT0 external interrupts
+        TCON = TCON | 0x01; // The trigger mode is pulse negative edge trigger
+
+         while (1)
+         {
+
+            for (a = 100; a> 0; a--)
+   {
+     display ();
+   }
+                 
+
+          }
+
+
+}
+/ ************************************************* ********* /
+void IR_IN () interrupt 0 using 0
+{
+        unsigned char j, k, N = 0;
+        unsigned char q = 0;
+        EX0 = 0;
+        delay (15);
+        if (IRIN == 1)
+        {
+                EX0 = 1;
+                return;
+        }
+                   // Confirm that the IR signal appears
+        while (! IRIN) // When IR becomes high, skip the leading low signal of 9ms.
+                delay (1);
+
+        for (j = 0; j <4; j ++) // Collect four sets of data
+        {
+                for (k = 0; k <8; k ++) // Each set of data has 8 bits
+                {
+                        while (IRIN) // When IR becomes low, skip the leading high signal of 4.5ms.
+                        {delay (1);}
+                        while (! IRIN) // Wait for IR to go high
+                                delay (1);
+                        while (IRIN) // Calculate the duration of IR high level
+                        {
+                                delay (1);
+                                N ++;
+                                if (N> = 30)
+                                {
+                                        EX0 = 1;
+                                        return;
+                                } //0.14ms automatically leave when the count is too long.
+                        } // High level count is completed
+                        IRCOM [j] = IRCOM [j] >> 1; // The most significant bit of the data is supplemented with "0"
+                        if (N> = 8)
+                        {
+                                IRCOM [j] = IRCOM [j] | 0x80; // The most significant bit of the data is supplemented with "1"
+                        }
+                        N = 0;
+                }
+        }
+
+        if (IRCOM [2]! = ~ IRCOM [3])
+        {
+                EX0 = 1;
+                return;
+        }
+
+        IRCOM [5] = IRCOM [2] & 0x0F; // take the lower four digits of the key code
+        IRCOM [6] = IRCOM [2] >> 4; // shift right 4 times, high four digits become low four digits
+
+        if (IRCOM [5]> 9)
+        {
+                IRCOM [5] = IRCOM [5] + 0x37;
+        }
+        else
+        IRCOM [5] = IRCOM [5] + 0x30;
+
+        if (IRCOM [6]> 9)
+        {
+                IRCOM [6] = IRCOM [6] + 0x37;
+        }
+        else
+        IRCOM [6] = IRCOM [6] + 0x30;
+
+        q = (((IRCOM [6] & 0x0f) << 4) + (IRCOM [5] & 0x0f));
+    
+
+        switch (q) // Determine the key code value
+        {
+                case 0x16: m = 0; break; // Serial port sends 0
+                case 0x03: m = 1; break; // Serial port sends 01
+                case 0x18: m = 2; break; // Serial port sends 02
+                case 0x55: m = 3; break; // Serial port sends 03
+                case 0x08: m = 4; break; // Serial port sends 04
+                case 0x13: m = 5; break; // Serial port sends 05
+                case 0x51: m = 6; break; // Serial port sends 06
+                case 0x42: m = 7; break; // Serial port sends 07
+                case 0x52: m = 8; break; // Serial port sends 08
+                case 0x41: m = 9; break; // Serial port sends 09
+
+                default: break;
+        }
+
+         EX0 = 1;
+}
+
+
+/ *************** Delay function ***************************** /
+void delay (unsigned char x) //x*0.14MS
+{
+        unsigned char i;
+        while (x--)
+        {
+                for (i = 0; i <13; i ++) {}
+        }
+}
+
+
+void display ()
+{
+   
+   P0 = table [m];
+   P2_3 = 0;
+   delay (5);
+   P2_3 = 1;
+   
+}
+
+void delay1 (int ms)
+{
+        unsigned char y;
+        while (ms--)
+        {
+                for (y = 0; y <250; y ++)
+                {
+                        _nop_ ();
+                        _nop_ ();
+                        _nop_ ();
+                        _nop_ ();
+                }
+        }
+}
+
+
+// **************************************************** ************
+void delay1ms ()
+{
+ unsigned int i;
+ for (i = 8024; i> 0; i--); // Delay 124 * 8 + 10 = 1002us
+}

@@ -1,0 +1,71 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Serial port interruption program experiment-experiment of running water lamp control by PC host computer
+                                 The following is sent in hexadecimal form
+                                 Send 01, led1 lights up;
+                                 Send 02, led2 lights up;
+                                 Send 03, led light 3 lights up;
+                                 Send 04, led light 4 is on;
+                                 Send 05, led light 5 is on;
+                                 Send 06, led light 6 is on;
+                                 Send 07, led light 7 is on;
+                                 Send 08, led light 8 is on;
+* [Instructions]: Please short the J2 jumper cap before use, the serial port assistant is set to 9600 bit rate, no parity bit, stop bit 1,
+Send data in hexadecimal form
+************************************************** ******************************** /
+
+/ * Preprocessing commands * /
+#include <reg52.h> // Include header file of microcontroller register
+#define uchar unsigned char
+#define uint unsigned int
+#define LED P1
+uchar dat, num;
+void main ()
+{
+        TMOD = 0x20; // Set the serial port baud rate with a timer
+        TH1 = 0xfd;
+        TL1 = 0xfd;
+        TR1 = 1;
+        REN = 1; // Serial port initialization
+        SM0 = 0;
+        SM1 = 1;
+        EA = 1; // Turn on the total interrupt
+        ES = 1; // Open serial port interrupt
+        while (1)
+        {
+                if (num == 1)
+                {
+                        switch (dat) // Judge the data received by the serial port
+                        {
+                                case 1: LED = 0xfe; break; // light the first lamp
+                                case 2: LED = 0xfd; break; // light the second lamp
+                                case 3: LED = 0xfb; break; // Light the third light
+                                case 4: LED = 0xf7; break; // light the fourth light
+                                case 5: LED = 0xef; break; // light the fifth lamp
+                                case 6: LED = 0xdf; break; // Light the 6th lamp
+                                case 7: LED = 0xbf; break; // Light the 7th lamp
+                                case 8: LED = 0x7f; break; // Light the 8th lamp
+                                case 0: LED = 0xff; break; // Empty all lights
+                        // default: break;
+                        }
+                        ES = 1; // Open serial port interrupt
+                        num = 0;
+                }
+
+        }
+}
+void ser () interrupt 4
+{
+        RI = 0;
+        dat = SBUF; // Receive data SBUF, that is to receive data from the computer.
+        ES = 0; // Close the serial port interrupt
+        num = 1;
+}

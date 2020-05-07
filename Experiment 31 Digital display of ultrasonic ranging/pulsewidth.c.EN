@@ -1,0 +1,130 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MINI51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52
+* [Compilation Environment]: Keil μVisio3
+* [Program function]: HC-SR04 ultrasonic ranging module DEMO program
+* [Instructions for use]: see below
+************************************************** ******************************** /
+
+/ ************************************************* ************************************************** ******** /
+// hc-sr04 DEMO program of ultrasonic ranging module
+// Crystal: 11.0592
+// Wiring: Module TRIG connected to P1.2 ECH0 connected to P1.1
+// Digital tube: Gongyang digital tube P0 is connected to the data port, P2.2 P2.1 P2.0 is connected to the gated digital tube
+/ ************************************************* ************************************************** ******** /
+#include <AT89x51.H> // Device configuration file
+#include <intrins.h>
+#define RX P1_1
+#define TX P1_2
+unsigned int time = 0;
+unsigned int timer = 0;
+unsigned char posit = 0;
+unsigned long S = 0;
+bit flag = 0;
+unsigned char const discode [] = {0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90,0xBF, 0xff / *-* /};
+unsigned char const positon [3] = {0xfe, 0xfd, 0xfb};
+unsigned char disbuff [4] = {0,0,0,0,};
+/ ************************************************* ******* /
+    void Display (void) // Scan the digital tube
+        {
+         if (posit == 0)
+         {P0 = (discode [disbuff [posit]]) & 0x7f;}
+         else
+         {P0 = discode [disbuff [posit]];}
+          P2 = positon [posit];
+          if (++ posit> = 3)
+          posit = 0;
+        }
+/ ************************************************* ******* /
+    void Conut (void)
+        {
+         time = TH0 * 256 + TL0;
+         TH0 = 0;
+         TL0 = 0;
+
+         S = (time * 1.7) / 100; // Calculated as CM
+         if ((S> = 700) || flag == 1) // Display "-" outside the measurement range
+         {
+          flag = 0;
+          disbuff [0] = 10; // "-"
+          disbuff [1] = 10; // "-"
+          disbuff [2] = 10; // "-"
+         }
+         else
+         {
+          disbuff [0] = S% 1000/100;
+          disbuff [1] = S% 1000% 100/10;
+          disbuff [2] = S% 1000% 10% 10;
+         }
+        }
+/ ************************************************* ******* /
+     void zd0 () interrupt 1 // T0 interrupt is used for counter overflow, exceeding the ranging range
+  {
+    flag = 1; // Interrupt overflow flag
+  }
+/ ************************************************* ******* /
+   void zd3 () interrupt 3 // T1 interrupt is used to scan the digital tube and meter 800MS startup module
+  {
+         TH1 = 0xf8;
+         TL1 = 0x30;
+         Display ();
+         timer ++;
+         if (timer> = 400)
+         {
+          timer = 0;
+          TX = 1; // 800MS starts the module once
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          TX = 0;
+         }
+  }
+/ ************************************************* ******** /
+
+        void main (void)
+
+  {
+    TMOD = 0x11; // Set T0 to mode 1, GATE = 1;
+        TH0 = 0;
+        TL0 = 0;
+        TH1 = 0xf8; // 2MS timing
+        TL1 = 0x30;
+        ET0 = 1; // Allow T0 interrupt
+        ET1 = 1; // Allow T1 interrupt
+        TR1 = 1; // Turn on the timer
+        EA = 1; // Turn on the total interrupt
+
+        while (1)
+        {
+         while (! RX); // Wait when RX is zero
+         TR0 = 1; // Turn on counting
+         while (RX); // When RX is 1, count and wait
+         TR0 = 0; // Turn off counting
+     Conut (); // Calculate
+        }
+
+  }

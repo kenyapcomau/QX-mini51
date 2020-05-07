@@ -1,0 +1,57 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Serial port interrupt program experiment-send data to computer through single chip microcomputer
+* [Instructions for use]: Bit rate 9600, parity bit: none Stop bit: 1
+************************************************** ******************************** /
+
+/ * Preprocessing commands * /
+#include <reg52.h> // Include header file of microcontroller register
+#define uchar unsigned char
+#define uint unsigned int
+uchar num, a;
+
+/ *
+************************************************** ******************************
+** Function name: main (void)
+** Function function: main function
+************************************************** ******************************
+* /
+void main ()
+{
+        TMOD = 0x20; // Set the serial port baud rate with a timer 9600
+        TH1 = 0xfd;
+        TL1 = 0xfd;
+        TR1 = 1;
+        REN = 1; // Serial port initialization
+        SM0 = 0;
+        SM1 = 1;
+        EA = 1; // Turn on the total interrupt
+        ES = 1;
+        while (1)
+        {
+                if (num == 1) // judge whether there is serial data transmission
+                {
+                        ES = 0;
+                        num = 0;
+                        SBUF = a; // Send data a to SBUF, that is, send the data of the single chip to the computer
+                        while (! TI);
+                        TI = 0;
+                        ES = 1;
+                }
+        }
+}
+void ser () interrupt 4
+{
+        RI = 0;
+        P2 = SBUF; // Receive data SBUF, that is to receive data from the computer.
+        a = SBUF;
+        num = 1;
+}

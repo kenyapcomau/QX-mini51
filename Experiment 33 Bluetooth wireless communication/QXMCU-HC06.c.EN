@@ -1,0 +1,147 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MINI51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52
+* [Compilation Environment]: Keil μVisio3
+* [Program function]: Bluetooth digital tube display plus LED indicator
+* 【Instructions for use】: 
+
+STC89c52 and HC-06 Bluetooth connection:
+        RXD TXD
+        TXD RXD
+        Please refer to the pictures in this document for the Bluetooth connection method
+Mobile phone adopts Bluetooth serial communication assistant
+Finally, I have changed to Android's own Bluetooth communication software
+Please refer to the picture 01 in this folder for the installation method of the Bluetooth module
+Bluetooth module purchase address: http://item.taobao.com/item.htm?id=27378740053
+
+************************************************** ******************************** /
+
+#include <reg52.h>
+#include <intrins.h>
+#define uchar unsigned char
+#define uint unsigned int
+uchar tmp;
+uint c = 0;
+sbit led1 = P1 ^ 0; // indicator 0
+sbit led2 = P1 ^ 1; // LED 1
+sbit led3 = P1 ^ 2; // indicator 3
+sbit led7 = P1 ^ 7; // indicator 3
+
+sbit P2_0 = P2 ^ 0;
+sbit P2_1 = P2 ^ 1;
+sbit P2_2 = P2 ^ 2;
+sbit P2_3 = P2 ^ 3;
+
+uchar code table [] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,
+                        0xf8,0x80,0x90};
+
+void delay1 (uint z) // 1ms
+{
+        uint x, y;
+        for (x = z; x> 0; x--)
+                for (y = 120; y> 0; y--);
+}
+void display (uchar value)
+{
+    uchar shu1, value1;
+        value1 = value-48;
+        // bai = value1 / 16;
+        shu1 = value1% 16;
+
+
+   P0 = table [shu1];
+   P2_0 = 0;
+   delay1 (1);
+   P2_0 = 1;
+}
+          
+void init (); // Serial port initialization
+void send (unsigned char a); // Single byte send function
+void ctrl (); // Receive processing function
+
+void main ()
+{
+                init ();
+          while (1)
+          {
+                  display (SBUF);
+                                  if (RI == 1) // whether there is data coming
+                  {
+                   RI = 0;
+                                  ctrl ();
+                                  }
+          }
+}
+
+ void init () // Serial port initialization
+ {
+                  ES = 0; // Off interrupt
+                  SCON = 0x50; // REN = 1 allows serial acceptance status, serial port working mode 1,
+                                                                                 // 10-bit UART (1 start bit, 8 data bits, 1 stop bit, no parity), variable baud rate
+
+                  TMOD = 0x20; // Timer 1 works in mode 2, 8-bit automatic reload mode, used to generate baud rate
+          TH1 = TL1 = 0xFD; // Baud rate 9600 (This test uses a crystal oscillator of 11.0592)
+          
+          PCON & = 0x7f; // Baud rate does not double
+          TR1 = 1; // Timer 1 starts working and generates baud rate
+                                                                                 // Send flag position 0
+                  TI = 0; // Receive flag position 0
+                  RI = 0;
+                  
+                  // EA = 0;
+              ES = 1;
+ }
+   
+void send (unsigned char a) // Single byte data sending
+{// Note: If the microcontroller TXD (P3.1) has no pull-up capability, a pull-up resistor must be connected to P3.1. This test requires a pull-up resistor
+        TI = 0;
+        SBUF = a;
+        while (TI == 0);
+        TI = 0;
+
+        if (c% 2) // Send indicator light, this light turns on and off every time it is received
+         led7 = 1;
+        else
+         led7 = 0;
+        c ++;
+}
+
+void ctrl () // Receive processing function
+{
+                                  switch (tmp)
+                                  {
+                                        case '1':
+                                                led1 = 1; // The character 1 is received and the indicator 0 is off
+                                                send (tmp);
+                                                break;
+                                        case '2': // character 2 received, indicator 1 off
+                                                 led2 = 1;
+                                                 send (tmp);
+                                                 break;
+                                        case '3': // character 3 received, indicator 0, 1 on
+                                                 led1 = 0;
+                                                 led2 = 0;
+                                                 send (tmp);
+                                                 break;
+                                        case '4': // character 4 received, indicator 0, 1 off
+                                                  led1 = 1;
+                                                  led2 = 1;
+                                                  send (tmp);
+                                                  break;
+                                        case '5': // character 5 is received, indicator 3 is on
+                                                led3 = 0;
+                                                send (tmp);
+                                                break;
+                                        default: // Others, all lights are off
+                                                  led1 = 1;
+                                                  led2 = 1;
+                                                  led3 = 1;
+                                                  send(tmp);
+                                  }
+}

@@ -1,0 +1,64 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Flow lamp test
+* [Instructions for use]: Note that the jumper is used to short-circuit J2 first, and the marquee module
+************************************************** ******************************** /
+
+#include <reg52.h> // Include header file of microcontroller register
+
+#define uchar unsigned char
+#define uint unsigned int
+
+/ * Function declaration ------------------------------------------------ -* /
+void delay (uint z);
+
+/ *
+************************************************** ******************************
+** Function name: main (void)
+** Function function: main function
+************************************************** ******************************
+* /
+void main ()
+{
+        uchar num, dat1, dat2;
+        delay (500);
+        P0 = 0;
+        while (1)
+        {
+                dat1 = 0xfe;
+                dat2 = 0x7f;
+                for (num = 0; num <7; num ++)
+                {
+                        P1 = dat1; // Initial assignment
+                        dat1 = dat1 << 1; // shift right by one
+                        delay (500); // Delay
+                }
+                for (num = 0; num <7; num ++)
+                {
+                        P1 = dat2; // Initial assignment
+                        dat2 = dat2 >> 1; // shift right
+                        delay (500); // Delay
+                }
+        }
+}
+
+/ *
+************************************************** ******************************
+** Function name: delay (uint z)
+** Function function: Delay function
+************************************************** ******************************
+* /
+void delay (uint z)
+{
+    uchar j;
+    for (z; z> 0; z--)
+        for (j = 200; j> 0; j--);
+}

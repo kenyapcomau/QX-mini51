@@ -1,0 +1,66 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Timer experiment
+* [Instructions]: Please short the J2 jumper cap before use
+                                 Timer 0-LED light flashing through timer timing
+************************************************** ******************************** /
+
+
+#include <reg52.h> // Include the definition of special function register
+#define LED P1 // Macro definition LED represents P1
+
+/ * Function declaration ------------------------------------------------ -* /
+void Init_Timer0 (void);
+
+
+/ *
+************************************************** ******************************
+** Function name: main (void)
+** Function function: main function
+************************************************** ******************************
+* /
+main ()
+{
+        Init_Timer0 ();
+        while (1);
+}
+
+
+/ *
+************************************************** ******************************
+** Function name: Init_Timer0 (void)
+** Function: Timer initialization subroutine
+************************************************** ******************************
+* /
+void Init_Timer0 (void) // Timer initialization subroutine
+{
+        TMOD | = 0x01; // Use mode 1, 16-bit timer, use "|" symbol can not be affected when using multiple timers
+        TH0 = 0x00; // Given the initial value, the maximum value of the timer is used here to count from 0 to 65535 overflow
+        TL0 = 0x00;
+        EA = 1; // The total interrupt is turned on
+        ET0 = 1; // Timer interrupt is on
+        TR0 = 1; // Timer switch is on
+}
+
+/ *
+************************************************** ******************************
+** Function name: Timer0_isr (void) interrupt 1 using 1
+** Function: Timer interrupt program
+************************************************** ******************************
+* /
+void Timer0_isr (void) interrupt 1 using 1
+{
+        TH0 = 0x00; // Re-assignment, mode 1 is a 16-bit counter, the initial value cannot be reinstalled by hardware
+        TL0 = 0x00;
+
+        LED = ~ LED; // The indicator light is inverted, you can see the flashing
+
+}

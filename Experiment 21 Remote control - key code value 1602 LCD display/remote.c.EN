@@ -1,0 +1,252 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: LCD displays the key code value of each remote control key, such as "IR-CODE: 8DH", that is, the key code of the key is 0x8D
+* [Instructions]: Please take off the J6 jumper cap of the digital tube before using the LCD
+************************************************** ******************************** /
+
+
+/ * Preprocessing commands * /
+#include <reg52.h> // Include header file of microcontroller register
+#include <intrins.h> // Include the header file defined by _nop_ () function
+#define uchar unsigned char
+#define uint unsigned int
+#define delayNOP (); {_nop _ (); _ nop _ (); _ nop _ (); _ nop_ ();};
+
+sbit IRIN = P3 ^ 2; // Infrared receiver data line
+sbit LCD_RS = P0 ^ 7;
+sbit LCD_RW = P0 ^ 6;
+sbit LCD_EN = P0 ^ 5;
+
+
+uchar code cdis1 [] = {"Red Control"};
+uchar code cdis2 [] = {"IR-CODE: --H"};
+uchar IRCOM [7];
+/ *************** Delay function ***************************** /
+void delay (unsigned char x) //x*0.14MS
+{
+        unsigned char i;
+        while (x--)
+        {
+                for (i = 0; i <13; i ++) {}
+        }
+}
+
+void delay1 (int ms)
+{
+        unsigned char y;
+        while (ms--)
+        {
+                for (y = 0; y <250; y ++)
+                {
+                        _nop_ ();
+                        _nop_ ();
+                        _nop_ ();
+                        _nop_ ();
+                }
+        }
+}
+/ ************************************************* ****************** /
+/ * * /
+/ * Check LCD busy status * /
+/ * lcd_busy is 1, busy, wait. When lcd-busy is 0, it is idle, and instructions and data can be written. * /
+/ * * /
+/ ************************************************* ****************** /
+
+bit lcd_busy ()
+{
+        bit result;
+        LCD_RS = 0;
+        LCD_RW = 1;
+        LCD_EN = 1;
+        delayNOP ();
+        result = (bit) (P2 & 0x80);
+        LCD_EN = 0;
+        return (result);
+}
+
+/ ************************************************* ****************** /
+/ * * /
+/ * Write command data to LCD * /
+/ * RS = L, RW = L, E = high pulse, D0-D7 = instruction code. * /
+/ * * /
+/ ************************************************* ****************** /
+
+void lcd_wcmd (uchar cmd)
+
+{
+        while (lcd_busy ());
+        LCD_RS = 0;
+        LCD_RW = 0;
+        LCD_EN = 0;
+        _nop_ ();
+        _nop_ ();
+        P2 = cmd;
+        delayNOP ();
+        LCD_EN = 1;
+        delayNOP ();
+        LCD_EN = 0;
+}
+
+/ ************************************************* ****************** /
+/ * * /
+/ * Write display data to LCD * /
+/ * RS = H, RW = L, E = high pulse, D0-D7 = data. * /
+/ * * /
+/ ************************************************* ****************** /
+
+void lcd_wdat (uchar dat)
+{
+        while (lcd_busy ());
+        LCD_RS = 1;
+        LCD_RW = 0;
+        LCD_EN = 0;
+        P2 = dat;
+        delayNOP ();
+        LCD_EN = 1;
+        delayNOP ();
+        LCD_EN = 0;
+}
+
+/ ************************************************* ****************** /
+/ * * /
+/ * LCD initial setting * /
+/ * * /
+/ ************************************************* ****************** /
+
+void lcd_init ()
+{
+        delay1 (15);
+        lcd_wcmd (0x38); // 16 * 2 display, 5 * 7 dot matrix, 8-bit data
+        delay1 (5);
+        lcd_wcmd (0x38);
+        delay1 (5);
+        lcd_wcmd (0x38);
+        delay1 (5);
+
+        lcd_wcmd (0x0c); // Display on and off cursor
+        delay1 (5);
+        lcd_wcmd (0x06); // Move the cursor
+        delay1 (5);
+        lcd_wcmd (0x01); // Clear LCD display content
+        delay1 (5);
+}
+
+/ ************************************************* ****************** /
+/ * * /
+/ * Set display position * /
+/ * * /
+/ ************************************************* ****************** /
+
+void lcd_pos (uchar pos)
+{
+        lcd_wcmd (pos | 0x80); // Data pointer = 80 + address variable
+}
+
+/ ************************************************* ****************** /
+void main ()
+{
+        uchar m;
+        IRIN = 1; // I / O port initialization
+        delay1 (10); // Delay
+        lcd_init (); // Initialize LCD
+        lcd_pos (0); // Set the display position to the first character of the first line
+        m = 0;
+        while (cdis1 [m]! = '\ 0')
+        {// Display characters
+                lcd_wdat (cdis1 [m]);
+                m ++;
+        }
+
+        lcd_pos (0x40); // Set the display position to the first character of the second line
+        m = 0;
+        while (cdis2 [m]! = '\ 0')
+        {
+                lcd_wdat (cdis2 [m]); // Display characters
+                m ++;
+        }
+
+        IE = 0x81; // Allow total interrupts and enable INT0 external interrupts
+        TCON = 0x01; // The trigger mode is pulse negative edge trigger
+
+        while (1);
+
+}
+/ ************************************************* ********* /
+void IR_IN () interrupt 0 using 0
+{
+        unsigned char j, k, N = 0;
+        EX0 = 0;
+        delay (15);
+        if (IRIN == 1)
+        {
+                EX0 = 1;
+                return;
+        }
+                   // Confirm that the IR signal appears
+        while (! IRIN) // When IR becomes high, skip the leading low signal of 9ms.
+                delay (1);
+
+        for (j = 0; j <4; j ++) // Collect four sets of data
+        {
+                for (k = 0; k <8; k ++) // Each set of data has 8 bits
+                {
+                        while (IRIN) // When IR becomes low, skip the leading high signal of 4.5ms.
+                        {delay (1);}
+                        while (! IRIN) // Wait for IR to go high
+                                delay (1);
+                        while (IRIN) // Calculate the duration of IR high level
+                        {
+                                delay (1);
+                                N ++;
+                                if (N> = 30)
+                                {
+                                        EX0 = 1;
+                                        return;
+                                } //0.14ms automatically leave when the count is too long.
+                        } // High level count is completed
+                        IRCOM [j] = IRCOM [j] >> 1; // The most significant bit of the data is supplemented with "0"
+                        if (N> = 8)
+                        {
+                                IRCOM [j] = IRCOM [j] | 0x80; // The most significant bit of the data is supplemented with "1"
+                        }
+                        N = 0;
+                }
+        }
+
+        if (IRCOM [2]! = ~ IRCOM [3])
+        {
+                EX0 = 1;
+                return;
+        }
+
+        IRCOM [5] = IRCOM [2] & 0x0F; // take the lower four digits of the key code
+        IRCOM [6] = IRCOM [2] >> 4; // shift right 4 times, high four digits become low four digits
+
+        if (IRCOM [5]> 9)
+        {
+                IRCOM [5] = IRCOM [5] + 0x37;
+        }
+        else
+        IRCOM [5] = IRCOM [5] + 0x30;
+
+        if (IRCOM [6]> 9)
+        {
+                IRCOM [6] = IRCOM [6] + 0x37;
+        }
+        else
+        IRCOM [6] = IRCOM [6] + 0x30;
+
+        lcd_pos (0x4b);
+        lcd_wdat (IRCOM [6]); // The first digit display
+        lcd_pos (0x4c);
+        lcd_wdat (IRCOM [5]); // The second digit display
+        EX0 = 1;
+}

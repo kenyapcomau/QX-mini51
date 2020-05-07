@@ -1,0 +1,133 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: 1602 LCD display
+* [Instructions]: 1. Unplug the J6 jumper of the digital tube before using the 1602 LCD. The digital tube and LCD cannot be shared
+                 2. Connect the 1602 LCD to the L2 row mother, the LCD faces the outside of the development board
+                                 3. If the 1602 LCD is not displayed after the programming is completed, please adjust the potentiometer RV1 at the bottom right of the development board
+************************************************** ******************************** /
+
+# include <reg51.h>
+# include <intrins.h>
+typedef unsigned char BYTE;
+typedef unsigned int WORD;
+typedef bit BOOL;
+
+sbit rs = P0 ^ 7;
+sbit rw = P0 ^ 6;
+sbit ep = P0 ^ 5;
+
+BYTE code dis1 [] = {"QXMCU"};
+BYTE code dis2 [] = {"HTTP://QXMCU.COM"};
+
+void delay (int m)
+{
+ unsigned char i, j;
+ for (i = 0; i <m; i ++)
+ for (j = 0; j <253; j ++);
+}
+
+ BOOL lcd_bz ()
+{
+  BOOL result;
+  rs = 0; // read busy signal
+  rw = 1;
+  ep = 1;
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  result = (BOOL) (P2 & 0x80);
+  ep = 0;
+  return result;
+}
+
+void lcd_wcmd (BYTE cmd)
+{
+  while (lcd_bz ());
+  rs = 0;
+  rw = 0;
+  ep = 0;
+  _nop_ ();
+  _nop_ ();
+  P2 = cmd;
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  ep = 1;
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  ep = 0;
+}
+
+void lcd_pos (BYTE pos)
+{
+  lcd_wcmd (pos | 0x80);
+}
+
+void lcd_wdat (BYTE dat)
+{
+   while (lcd_bz ());
+  rs = 1;
+  rw = 0;
+  ep = 0;
+  _nop_ ();
+  _nop_ ();
+  P2 = dat;
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  ep = 1;
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  _nop_ ();
+  ep = 0;
+}
+
+void lcd_init ()
+{
+  lcd_wcmd (0x38);
+  delay (1);
+  lcd_wcmd (0x0c);
+  delay (1);
+  lcd_wcmd (0x06);
+  delay (1);
+  lcd_wcmd (0x01);
+  delay (1);
+}
+
+main ()
+{
+  BYTE i;
+  lcd_init ();
+  delay (10);
+
+  lcd_pos (0);
+  i = 0;
+  while (dis1 [i]! = '\ 0')
+   {
+     lcd_wdat (dis1 [i]);
+     i ++;
+   }
+
+   lcd_pos (0x40);
+  i = 0;
+  while (dis2 [i]! = '\ 0')
+   {
+     lcd_wdat (dis2 [i]);
+     i ++;
+   }
+   while (1);
+}

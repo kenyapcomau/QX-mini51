@@ -1,0 +1,133 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Independent key test
+                 Press the S1 key and the marquee flashes once
+                             Press the S2 key and the marquee flashes twice
+                 Press the S3 key and the marquee flashes three times
+                             Press the S4 key and the marquee flashes four times
+* [Instructions for use]: Note that the jumper is used to short-circuit J2 first, and the marquee module
+************************************************** ******************************** /
+
+#include <reg52.h> // Include header file of microcontroller register
+
+#define uchar unsigned char
+#define uint unsigned int
+
+/ * Function declaration ------------------------------------------------ -* /
+void delay (uint z);
+
+/* Variable definitions---------------------------------------------- * /
+sbit key1 = P3 ^ 5;
+sbit key2 = P3 ^ 4;
+sbit key3 = P3 ^ 3;
+sbit key4 = P3 ^ 2;
+
+/ *
+************************************************** ******************************
+** Function name: main (void)
+** Function function: main function
+************************************************** ******************************
+* /
+void main ()
+{
+         P0 = 0;
+         
+         while (1) // infinite scan
+         {
+                if (key1 == 0)
+                {
+                        delay (5); // Debounce
+                        if (key1 == 0) // Confirm that the key is pressed
+                        {
+                                while (! key1); // Release detection
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                        }
+           
+                }
+           
+
+                if (key2 == 0)
+                {
+                        delay (5); // Debounce
+                        if (key2 == 0) // Confirm that the key is pressed
+                        {
+                                while (! key2); // Release detection
+                            P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                        }
+                }
+                if (key3 == 0)
+                {
+                        delay (5); // Debounce
+                        if (key3 == 0) // Confirm that the key is pressed
+                        {
+                                while (! key3); // Release detection
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                        }
+                }
+                if (key4 == 0)
+                {
+                        delay (5); // Debounce
+                        if (key4 == 0) // Confirm that the key is pressed
+                        {
+                                while (! key4); // Release detection
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                                P1 = 0;
+                                delay (200);
+                                P1 = 0XFF;
+                                delay (200);
+                        }
+                }
+                delay (10);
+        }
+}
+
+/ *
+************************************************** ******************************
+** Function name: delay (uint z)
+** Function function: Delay function
+************************************************** ******************************
+* /
+void delay (uint z)
+{
+    uint i, j;
+    for (i = z; i> 0; i--)
+        for (j = 110; j> 0; j--);
+}

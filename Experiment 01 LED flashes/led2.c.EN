@@ -1,0 +1,36 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: LED flashes
+* [Instructions for use]: Note that the jumper is used to short-circuit J2 first, and the marquee module
+************************************************** ******************************** /
+
+#include <reg51.h> // Some special function registers of 51 are defined in this file
+
+void delay (unsigned int i); // Declare the delay function
+
+void main ()
+{
+   
+  P1 = 0x00; // Set P0 port to low level
+  delay (600); // Call the delay program
+  P1 = 0xff; // Set P0 port to high level
+  delay (600); // Call the delay program
+
+
+}
+
+/ ******* Delay function ************* /
+void delay (unsigned int i)
+{
+    unsigned char j;
+    for (i; i> 0; i--)
+        for (j = 255; j> 0; j--);
+}

@@ -1,0 +1,62 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Buzzer test-alarm
+* [Instructions]: Short-circuit buzzer J1 jump cap
+************************************************** ******************************** /
+
+#include <reg51.h>
+#include <intrins.h>
+
+#define uchar unsigned char
+#define uint unsigned int
+
+sbit BEEP = P3 ^ 6;
+
+/ ************************************************* ********
+ 500us delay function
+ Crystal oscillator: 11.0592MHz
+************************************************** ******* /
+void delay500 (void)
+{
+  uchar i;
+  for (i = 230; i> 0; i--);
+}
+
+/ ************************************************* ********
+ Main function
+************************************************** ******* /
+main ()
+{
+  uchar j;
+  while (1)
+  {
+    for (j = 200; j> 0; j--)
+        {
+          BEEP = ~ BEEP; // Output frequency 1KHz
+          delay500 (); // Delay 500us
+        }
+
+        for (j = 200; j> 0; j--)
+        {
+          BEEP = ~ BEEP; // Output frequency 500Hz
+          delay500 (); // Delay 1ms
+          delay500 ();
+        }
+  }
+}
+
+/ ************************************************* ********
+
+Signal generation method
+The 500Hz signal period is 2ms, and the signal level changes every 1ms.
+The 1KHz signal period is 1ms, and the signal level changes every 500us.
+
+************************************************** ******** /

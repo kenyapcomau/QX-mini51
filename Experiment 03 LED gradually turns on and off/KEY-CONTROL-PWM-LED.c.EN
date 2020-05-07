@@ -1,0 +1,125 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]:
+* [Instructions]: Please connect J1 and J2 jumper caps before the experiment
+                                 Use timer control to generate PWM wave with variable duty cycle
+                                 Press S1, the PWM value increases, the duty cycle decreases, and the LED lights gradually
+                                 Press S2, the PWM value decreases, the duty cycle increases, and the LED light dims
+                                 When the PWM value increases to the maximum value or decreases to the minimum value, the buzzer will alarm
+************************************************** ******************************** /
+
+#include <reg51.h>
+#include <intrins.h>
+
+sbit K1 = P3 ^ 4; // PWM value increase key
+sbit K2 = P3 ^ 5; // PWM value reduction key
+sbit BEEP = P3 ^ 6; // Buzzer
+unsigned char PWM = 0x7f; // Assign initial value
+
+void Beep ();
+void delayms (unsigned char ms);
+void delay (unsigned char t);
+
+/ ************************************************* ******** /
+void main ()
+{
+    P1 = 0xff;
+    TMOD = 0x21;
+        TH0 = 0xfc; // 1ms delay constant
+    TL0 = 0x66; // frequency adjustment
+
+    TH1 = PWM; // Pulse width adjustment
+    TL1 = 0;
+
+        EA = 1;
+        ET0 = 1;
+        ET1 = 1;
+    
+    TR0 = 1;
+
+   while (1)
+   {
+        do {
+            if (PWM! = 0xff)
+                  {PWM ++; delayms (10);}
+        else Beep ();
+          }
+    while (K1 == 0);
+
+        do {
+      if (PWM! = 0x02)
+            {PWM--; delayms (10);}
+      else Beep ();
+          }
+    while (K2 == 0);
+  }
+}
+
+/ ************************************************* ******** /
+// Timer 0 interrupt service routine (frequency)
+/ ************************************************* ******** /
+void timer0 () interrupt 1
+{
+    TR1 = 0;
+    TH0 = 0xfc;
+    TL0 = 0x66;
+    TH1 = PWM;
+    TR1 = 1;
+    P1 = 0x00; // Start output
+}
+
+/ ************************************************* ******** /
+// Timer 1 interrupt service routine (pulse width)
+/ ************************************************* ******** /
+void timer1 () interrupt 3
+{
+    TR1 = 0;
+    P1 = 0xff; // End output
+}
+
+/ ************************************************* ******** /
+// Buzzer subroutine
+/ ************************************************* ******** /
+
+void Beep ()
+  {
+    unsigned char i;
+    for (i = 0; i <100; i ++)
+      {
+        delay (100);
+        BEEP =! BEEP; // Beep negates
+      }
+    BEEP = 1; // Turn off the buzzer
+        delayms (100);
+  }
+
+/ ************************************************* ******** /
+// Delay subroutine
+/ ************************************************* ******** /
+void delay (unsigned char t)
+ {
+   while (t--);
+ }
+
+/ ************************************************* ******** /
+// Delay subroutine
+/ ************************************************* ******** /
+void delayms (unsigned char ms)
+
+{
+   unsigned char i;
+   while (ms--)
+    {
+      for (i = 0; i <120; i ++);
+    }
+}
+
+/ ************************************************* ******** /

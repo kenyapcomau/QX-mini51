@@ -1,0 +1,123 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MCS51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52RC
+* [Compilation Environment]: Keil μVisio4
+* [Program function]: Passive buzzer test-August osmanthus
+* [Instructions]: Short-circuit buzzer J1 jump cap
+************************************************** ******************************** /
+
+#include <reg52.h>
+#include <intrins.h>
+// About how to compile the music code, it is actually very simple, you can see the following code.
+// The frequency constant is the pitch in music terms, and the beat constant is how many beats in music terms;
+// So come up with the score, try editing!
+
+sbit Beep = P3 ^ 6;
+   
+unsigned char n = 0; // n is the constant variable of beat
+unsigned char code music_tab [] = {
+0x18, 0x30, 0x1C, 0x10, // The format is: frequency constant, beat constant, frequency constant, beat constant,
+0x20, 0x40, 0x1C, 0x10,
+0x18, 0x10, 0x20, 0x10,
+0x1C, 0x10, 0x18, 0x40,
+0x1C, 0x20, 0x20, 0x20,
+0x1C, 0x20, 0x18, 0x20,
+0x20, 0x80, 0xFF, 0x20,
+0x30, 0x1C, 0x10, 0x18,
+0x20, 0x15, 0x20, 0x1C,
+0x20, 0x20, 0x20, 0x26,
+0x40, 0x20, 0x20, 0x2B,
+0x20, 0x26, 0x20, 0x20,
+0x20, 0x30, 0x80, 0xFF,
+0x20, 0x20, 0x1C, 0x10,
+0x18, 0x10, 0x20, 0x20,
+0x26, 0x20, 0x2B, 0x20,
+0x30, 0x20, 0x2B, 0x40,
+0x20, 0x20, 0x1C, 0x10,
+0x18, 0x10, 0x20, 0x20,
+0x26, 0x20, 0x2B, 0x20,
+0x30, 0x20, 0x2B, 0x40,
+0x20, 0x30, 0x1C, 0x10,
+0x18, 0x20, 0x15, 0x20,
+0x1C, 0x20, 0x20, 0x20,
+0x26, 0x40, 0x20, 0x20,
+0x2B, 0x20, 0x26, 0x20,
+0x20, 0x20, 0x30, 0x80,
+0x20, 0x30, 0x1C, 0x10,
+0x20, 0x10, 0x1C, 0x10,
+0x20, 0x20, 0x26, 0x20,
+0x2B, 0x20, 0x30, 0x20,
+0x2B, 0x40, 0x20, 0x15,
+0x1F, 0x05, 0x20, 0x10,
+0x1C, 0x10, 0x20, 0x20,
+0x26, 0x20, 0x2B, 0x20,
+0x30, 0x20, 0x2B, 0x40,
+0x20, 0x30, 0x1C, 0x10,
+0x18, 0x20, 0x15, 0x20,
+0x1C, 0x20, 0x20, 0x20,
+0x26, 0x40, 0x20, 0x20,
+0x2B, 0x20, 0x26, 0x20,
+0x20, 0x20, 0x30, 0x30,
+0x20, 0x30, 0x1C, 0x10,
+0x18, 0x40, 0x1C, 0x20,
+0x20, 0x20, 0x26, 0x40,
+0x13, 0x60, 0x18, 0x20,
+0x15, 0x40, 0x13, 0x40,
+0x18, 0x80, 0x00
+};
+  
+void delay (unsigned char m) // Control frequency delay
+{
+ unsigned i = 3 * m;
+ while (-i);
+}
+void delayms (unsigned char a) // Hao seconds delay subroutine
+{
+  while (-a);
+}
+void main ()
+{
+        unsigned char p, m; // m is a frequency constant variable
+        unsigned char i = 0;
+        TMOD & = 0x0f;
+        TMOD | = 0x01;
+        TH0 = 0xd8; TL0 = 0xef;
+        IE = 0x82;
+play:
+        while (1)
+    {
+        a: p = music_tab [i];
+                if (p == 0x00)
+                {
+                        i = 0, delayms (1000); goto play; // If you encounter an end character, delay for 1 second, return to the beginning and try again
+                }
+                else
+                        if (p == 0xff)
+                        {
+                                i = i + 1; delayms (100), TR0 = 0; goto a; // If a rest is encountered, delay 100ms, continue to take the next note
+                        }
+                        else
+                        {
+                                m = music_tab [i ++], n = music_tab [i ++]; // take frequency constant and beat constant
+                        }
+                        TR0 = 1; // Turn on timer 0
+                while (n! = 0) // Wait for the beat to complete, output audio
+                {
+                        Beep = ~ Beep;
+                        delay (m);
+                }
+                TR0 = 0; // Off timer 0
+    }
+}
+void int0 () interrupt 1 // Use interrupt timer 0 to control the beat
+{
+        TH0 = 0xd8;
+        TL0 = 0xef;
+        n--;
+}

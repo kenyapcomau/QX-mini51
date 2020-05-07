@@ -1,0 +1,290 @@
+/ ************************************************* ********************************
+* [Writing time]: March 5, 2014
+* [Author]: Qingxiang Electronics: 03
+* [Edition]: 1.0
+* [Website]: http://www.qxmcu.com/
+* [Taobao Store]: http://qxmcu.taobao.com/ (Direct Store) http://qx-mcu.taobao.com/ (Head Office)
+* [Experimental platform]: QX-MINI51 microcontroller development board
+* [External crystal oscillator]: 11.0592mhz
+* [Main control chip]: STC89C52
+* [Compilation Environment]: Keil μVisio3
+* [Program function]: LCD1602 displays ultrasonic ranging
+* [Instructions for use]: see below
+************************************************** ******************************** /
+
+/ *
+SMC1602A (16 * 2) analog port wiring method
+Connection diagram:
+       -------------------------------------------------- -
+       | LCM ----- 51 | LCM ----- 51 | LCM ------ 51 |
+       -------------------------------------------------- |
+       | DB0 ----- P2.0 | DB4 ----- P2.4 | RW ------- P0.6 |
+       | DB1 ----- P2.1 | DB5 ----- P2.5 | RS ------- P0.7 |
+       | DB2 ----- P2.2 | DB6 ----- P2.6 | E -------- P0.5 |
+       | DB3 ----- P2.3 | DB7 ----- P2.7 | Connect VLCD with 1K resistor to GND |
+       -------------------------------------------------- -
+Wiring: Module TRIG connected to P1.2 ECH0 connected to P1.1
+
+The source code of this program is for learning reference only and should not be used for commercial purposes. Please contact the author if necessary.
+
+[Note: AT89x51 uses 12M or 11.0592M crystal, actual measurement uses 11.0592M]
+================================================== =========== * /
+#include <AT89x51.H> // Device configuration file
+#include <intrins.h>
+#define RX P1_1
+#define TX P1_2
+
+#define LCM_RW P0_6 // Define LCD pin
+#define LCM_RS P0_7
+#define LCM_E P0_5
+#define LCM_Data P2
+
+
+#define Busy 0x80 // Used to detect the Busy logo in the LCM status word
+
+void LCMInit (void);
+void DisplayOneChar (unsigned char X, unsigned char Y, unsigned char DData);
+void DisplayListChar (unsigned char X, unsigned char Y, unsigned char code * DData);
+void Delay5Ms (void);
+void Delay400Ms (void);
+void Decode (unsigned char ScanCode);
+void WriteDataLCM (unsigned char WDLCM);
+void WriteCommandLCM (unsigned char WCLCM, BuysC);
+
+unsigned char ReadDataLCM (void);
+unsigned char ReadStatusLCM (void);
+unsigned char code mcustudio [] = {"WWW.QXMCU.COM"};
+unsigned char code email [] = {"863888999@QQ.COM"};
+unsigned char code Cls [] = {""};
+unsigned char code ASCII [15] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' . ','-',' M '};
+
+static unsigned char DisNum = 0; // Display pointer
+       unsigned int time = 0;
+           unsigned long S = 0;
+           bit flag = 0;
+           unsigned char disbuff [4] = {0,0,0,0,};
+
+
+// write data
+void WriteDataLCM (unsigned char WDLCM)
+{
+        ReadStatusLCM (); // Check busy
+        LCM_Data = WDLCM;
+        LCM_RS = 1;
+        LCM_RW = 0;
+        LCM_E = 0; // If the crystal speed is too high, you can add a small delay after this
+        LCM_E = 0; // Delay
+        LCM_E = 1;
+}
+
+// write instruction
+void WriteCommandLCM (unsigned char WCLCM, BuysC) // BuyC ignores busy detection when it is 0
+{
+        if (BuysC) ReadStatusLCM (); // Check busy as needed
+        LCM_Data = WCLCM;
+        LCM_RS = 0;
+        LCM_RW = 0;
+        LCM_E = 0;
+        LCM_E = 0;
+        LCM_E = 1;
+}
+
+// Read data
+unsigned char ReadDataLCM (void)
+{
+        LCM_RS = 1;
+        LCM_RW = 1;
+        LCM_E = 0;
+        LCM_E = 0;
+        LCM_E = 1;
+        return (LCM_Data);
+}
+
+// Read status
+unsigned char ReadStatusLCM (void)
+{
+        LCM_Data = 0xFF;
+        LCM_RS = 0;
+        LCM_RW = 1;
+        LCM_E = 0;
+        LCM_E = 0;
+        LCM_E = 1;
+        while (LCM_Data & Busy); // detect busy signal
+        return (LCM_Data);
+}
+
+void LCMInit (void) // LCM initialization
+{
+        LCM_Data = 0;
+        WriteCommandLCM (0x38,0); // Three display mode settings, no busy signal detected
+        Delay5Ms ();
+        WriteCommandLCM (0x38,0);
+        Delay5Ms ();
+        WriteCommandLCM (0x38,0);
+        Delay5Ms ();
+
+        WriteCommandLCM (0x38,1); // Display mode setting, start requesting busy signal detection
+        WriteCommandLCM (0x08,1); // Close the display
+        WriteCommandLCM (0x01,1); // Display clear screen
+        WriteCommandLCM (0x06,1); // display cursor movement settings
+        WriteCommandLCM (0x0F, 1); // display on and cursor setting
+}
+
+// Display a character at the specified position
+void DisplayOneChar (unsigned char X, unsigned char Y, unsigned char DData)
+{
+        Y & = 0x1;
+        X & = 0xF; // Limit X cannot be greater than 15, Y cannot be greater than 1
+        if (Y) X | = 0x40; // Address code + 0x40 when the second line is to be displayed;
+        X | = 0x80; // Calculate the instruction code
+        WriteCommandLCM (X, 1); // Send command word
+        WriteDataLCM (DData); // Send data
+}
+
+// Display a string of characters at the specified position
+void DisplayListChar (unsigned char X, unsigned char Y, unsigned char code * DData)
+{
+        unsigned char ListLength;
+
+  ListLength = 0;
+        Y & = 0x1;
+        X & = 0xF; // Limit X cannot be greater than 15, Y cannot be greater than 1
+        while (DData [ListLength]> 0x19) // Exit if the end of the string
+                {
+                        if (X <= 0xF) // X coordinate should be less than 0xF
+                                {
+                                        DisplayOneChar (X, Y, DData [ListLength]); // Display a single character
+                                        ListLength ++;
+                                        X ++;
+                                }
+                }
+}
+
+// 5ms delay
+void Delay5Ms (void)
+{
+        unsigned int TempCyc = 5552;
+        while (TempCyc--);
+}
+
+// 400ms delay
+void Delay400Ms (void)
+{
+        unsigned char TempCycA = 5;
+        unsigned int TempCycB;
+        while (TempCycA--)
+                {
+                        TempCycB = 7269;
+                        while (TempCycB--);
+                };
+}
+/ ************************************************* ******* /
+void Conut (void)
+        {
+         time = TH0 * 256 + TL0;
+         TH0 = 0;
+         TL0 = 0;
+
+         S = (time * 1.7) / 100; // Calculated as CM
+         if ((S> = 700) || flag == 1) // Display "-" outside the measurement range
+         {
+          flag = 0;
+         
+          DisplayOneChar (0, 1, ASCII [11]);
+          DisplayOneChar (1, 1, ASCII [10]); // Display point
+          DisplayOneChar (2, 1, ASCII [11]);
+          DisplayOneChar (3, 1, ASCII [11]);
+          DisplayOneChar (4, 1, ASCII [12]); // Display M
+         }
+         else
+         {
+          disbuff [0] = S% 1000/100;
+          disbuff [1] = S% 1000% 100/10;
+          disbuff [2] = S% 1000% 10% 10;
+          DisplayOneChar (0, 1, ASCII [disbuff [0]]);
+          DisplayOneChar (1, 1, ASCII [10]); // Display point
+          DisplayOneChar (2, 1, ASCII [disbuff [1]]);
+          DisplayOneChar (3, 1, ASCII [disbuff [2]]);
+          DisplayOneChar (4, 1, ASCII [12]); // Display M
+         }
+        }
+/ ************************************************* ******* /
+     void zd0 () interrupt 1 // T0 interrupt is used for counter overflow, exceeding the ranging range
+  {
+    flag = 1; // Interrupt overflow flag
+  }
+/ ************************************************* ******* /
+     void StartModule () // Start the module
+  {
+          TX = 1; // Start the module once
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          _nop_ ();
+          TX = 0;
+  }
+/ ************************************************* ******* /
+void delayms (unsigned int ms)
+{
+        unsigned char i = 100, j;
+        for (; ms; ms--)
+        {
+                while (-i)
+                {
+                        j = 10;
+                        while (-j);
+                }
+        }
+}
+/ ************************************************* ******** /
+void main (void)
+{
+        unsigned char TempCyc;
+        Delay400Ms (); // Start waiting, wait for LCM to speak into working state
+        LCMInit (); // LCM initialization
+        Delay5Ms (); // Delay for a moment (not necessary)
+        DisplayListChar (0, 0, mcustudio);
+        DisplayListChar (0, 1, email);
+        ReadDataLCM (); // The test sentence is meaningless
+        for (TempCyc = 0; TempCyc <10; TempCyc ++)
+        Delay400Ms (); // Delay
+        DisplayListChar (0, 1, Cls);
+        while (1)
+        {
+         TMOD = 0x01; // Set T0 to mode 1, GATE = 1;
+         TH0 = 0;
+         TL0 = 0;
+         ET0 = 1; // Allow T0 interrupt
+         EA = 1; // Turn on the total interrupt
+
+        while (1)
+          {
+             StartModule ();
+                // DisplayOneChar (0, 1, ASCII [0]);
+             while (! RX); // Wait when RX is zero
+             TR0 = 1; // Turn on counting
+             while (RX); // When RX is 1, count and wait
+             TR0 = 0; // Turn off counting
+         Conut (); // Calculate
+                 delayms (80); // 80MS
+                 
+          }
+        }
+}
