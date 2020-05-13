@@ -155,6 +155,50 @@ void main (void)
 
 / ************************************************* *******************
 * Name: Main ()
+* Function: Main function
+* Input: None
+* Output: None
+************************************************** ********************* /
+void lcd_mesg (unsigned char code * adder1)
+{
+         unsigned char i;
+         TransferData (0x80,0); // Set Graphic Display RAM Address
+         delay (100);
+         for (i = 0; i <32; i ++)
+                 {
+                         TransferData (* adder1,1);
+                         adder1 ++;
+                 }
+
+         TransferData (0x90,0); // Set Graphic Display RAM Address
+         delay (100);
+         for (i = 32; i <64; i ++)
+                 {
+                         TransferData (* adder1,1);
+                         adder1 ++;
+                 }
+}
+
+/ ************************************************* *******************
+* Name: Main ()
+* Function: Main function
+* Input: None
+* Output: None
+************************************************** ********************* /
+void TransferData (char data1, bit DI) // Transfer data or command, when DI = 0, transfer command, when
+DI = 1, transmit data.
+           {
+             WRD = 0;
+             RS = DI;
+             delay (1);
+             P2 = Convert (data1);
+             E = 1;
+             delay (1);
+             E = 0;
+            }
+
+/ ************************************************* *******************
+* Name: Main ()
 * Function: Main
 * Input: None
 * Output: None
